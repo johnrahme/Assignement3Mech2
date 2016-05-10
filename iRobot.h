@@ -14,6 +14,7 @@
 #include "lcd.h"
 #include "adConv.h"
 #include "patternHandler.h"
+#include "music.h"
 
 #define		START                   128			//Create start command
 #define		FULL			132			//Create full control command

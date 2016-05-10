@@ -345,6 +345,26 @@ char getBumpDropSensor(){
     bumpSensor = ser_getch();
     return bumpSensor;
 }
+char getForceField(){
+    ser_putch(142);//Set to read sensors
+     __delay_ms(5);
+    ser_putch(17); // Set packet id to infrared Byte
+     __delay_ms(5);
+     char result = ser_getch();
+     if (result == 242||result == 252 || result == 250 || result == 246 ||result == 254){
+         return 1;
+     }
+     return 0;
+    
+}
+char getVirtualWall(){
+    ser_putch(142);//Set to read sensors
+     __delay_ms(5);
+    ser_putch(13); // Set packet id to infrared Byte
+     __delay_ms(5);
+     return ser_getch();
+    
+}
 //Get the cliff sensor readings
 char getCliffSensors(){
     char cliffSensors = 0;
@@ -382,13 +402,15 @@ void updateSensors(){
         char bumpSensor = getBumpDropSensor();
         // Check cliff sensors
         char cliffSensors = getCliffSensors();
-        char stopMovement = bumpSensor&0b00011111;
+        char bumpSensorResult = bumpSensor&0b00011111;
+        char forceField = getForceField();
         
         
-        if(stopMovement||cliffSensors){
+        if(bumpSensorResult||cliffSensors ||forceField || getVirtualWall()){
             LED0 = !LED0;
             //Stop all movement
             stopAllPatterns();
+            //playSong();
             
         }
         //Update and write distance travelled
