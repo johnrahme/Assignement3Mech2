@@ -44,6 +44,8 @@ void turnAndDriveDirect(int rightVelocity, int leftVelocity);
 char followWallPattern();
 char followWallPatternV2();
 
+char navigateMazePattern(char distance, int degrees);
+
 char patternStage = 0;
 int lastValueOff = 0;
 char activateLostWall = 0;

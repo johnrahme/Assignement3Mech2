@@ -7,6 +7,7 @@
     straightPatternDone = 1;
     moveToWallPatternDone = 1;
     followWallPatternStart = 0;
+    navigateMazePatternStart = 0;
     //Set default scan to scan only
     onlyScan = 1;
     //Reset the pattern stage 
@@ -18,6 +19,19 @@
 }
 
 void updatePatterns() {
+    
+    if(navigateMazePatternStart){
+        if(updateMap){
+            degreesToTurn = moveSegment();
+            lcdSetCursor(0x00);
+            lcdWriteToDigitBCD(degreesToTurn, 3, 1);
+            updateMap = 0;
+            
+        }
+        if(navigateMazePattern(100, degreesToTurn)){
+            updateMap = 1;
+        }
+    }
     //Check if the follow wall pattern flag has been set
     if (followWallPatternStart) {
         followWallPatternV2();

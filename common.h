@@ -11,6 +11,11 @@
 #define PB2 !RB2
 #define PB3 !RB3
 
+#define NORTH 0
+#define WEST 3
+#define SOUTH 2
+#define EAST 1
+
 
 #endif	/* COMMON_H */
 

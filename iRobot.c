@@ -182,37 +182,7 @@ char followWallPatternV2(){
     }
 }
 
-// The old way of following the wall, not used in presentation. Can be ignored.
-char followWallPattern(){
-    if(patternStage == 0){
-        RTC_MOVE_PATTERN_COUNTER = 0; 
-        MOVE_PATTERN_TIME = 20;
-        int valueOff = latestReadMeterValue-50;
-        valueOff*10; // Convert To millimeters
-        int radius = 0;
-        radius = 20000/valueOff;
-        
-        turnAndDrive(radius);
-        //increment pattern stage
-        patternStage++;
-        //Reset Pattern Flag
-        RTC_FLAG_MOVE_PATTERN = 0;
-    }
-    else if(patternStage == 1 && RTC_FLAG_MOVE_PATTERN){
-        RTC_MOVE_PATTERN_COUNTER = 0; 
-        MOVE_PATTERN_TIME = 20;
-        int valueOff = latestReadMeterValue-50;
-        valueOff*10; // Convert To millimeters
-        int radius = 0;
-        radius = 20000/valueOff;
-        
-        turnAndDrive(radius);
-        //Do not increment patternStage since we want this function to run forever
-        //patternStage++;
-        //Reset Pattern Flag
-        RTC_FLAG_MOVE_PATTERN = 0;
-    }
-}
+
 //Move towards the wall and then turn 90 degrees
 char moveTowardsWallPattern(int degree, int distance)
 {
@@ -320,6 +290,47 @@ char moveSquarePattern(){
     return 0;
 }
 
+
+char navigateMazePattern(char distance, int degrees)
+{
+    if(degrees == 0 && patternStage == 0){
+            patternStage = 1;
+            RTC_FLAG_MOVE_PATTERN = 1;
+    }
+    if(patternStage == 0){
+        if(degrees<0){
+            turnDegreesCCW(-degrees);
+        }
+        else{
+            turnDegreesCW(degrees);
+        }
+        patternStage ++;
+        
+        RTC_MOVE_PATTERN_COUNTER = 0; 
+        //Reset Pattern Flag
+        RTC_FLAG_MOVE_PATTERN = 0;
+        lcdSetCursor(0x0A);
+        lcdWriteString("Turning");
+    }
+    else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 1){
+        moveDistanceForward(distance);
+        //increment pattern stage
+        patternStage++;
+        //Reset Pattern Flag
+        RTC_FLAG_MOVE_PATTERN = 0;
+        lcdSetCursor(0x0A);
+        lcdWriteString("Forward");
+    }
+    else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 2){
+        //increment pattern stage
+        patternStage = 0;
+        //Reset Pattern Flag
+        RTC_FLAG_MOVE_PATTERN = 0;
+        return 1;
+    }
+    //Return 0 if pattern is not over
+    return 0;
+}
 //-----MOVE PATTERNS END-----
 
 //-----SENSOR READINGS START----

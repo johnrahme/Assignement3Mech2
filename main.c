@@ -17,6 +17,7 @@
 #include "adConv.h"
 #include "patternHandler.h"
 #include "music.h"
+#include "eeprom.h"
 
 #pragma config BOREN = OFF, CPD = OFF, WRT = OFF, FOSC = HS, WDTE = OFF, CP = OFF, LVP = OFF, PWRTE = OFF
 
@@ -74,6 +75,9 @@ void main (void){
     setup();
     LED1 = 0;
     LED0 = 0;
+    writeAdvancedMap();
+    setStartPos(WEST,1,2);
+    victimsFound = 0;
     
     // Start the adc conversion
     startADCConversion();
@@ -82,45 +86,18 @@ void main (void){
         //Check ADC coversion
         if(conversionDone){ //Check conversion done flags
             conversionDone = 0; 
-            printADCData(); //Prints the conversion data to the LCD
+            //printADCData(); //Prints the conversion data to the LCD
         }
-        
-        //Start the square pattern if PB0 is pressed
-        if(pb0Pressed){          
-            // Start the square pattern
-            playSong();
-            //distanceTraveled = 0; //added in to 0 the total distance traveled at the start of the function 
-            //squarePatternDone = 0;
-            //followWallPatternStart = 1;
-            //turnAndDriveDirect(100,200);
-            //patternDone = 0;
-            pb0Pressed = 0;
-        }
+
         
         if(pb1Pressed){
             // Start the straight pattern
             distanceTraveled = 0; //added in to 0 the total distance traveled at the start of the function
-            straightPatternDone = 0;
+            navigateMazePatternStart = 1;
             patternDone = 0;
             pb1Pressed = 0;
-        }
-        if(pb2Pressed){
-            // Start scanning closest wall without wall follow
-            setScannerSpeed(8);
-            scanRunning = 1;
-            onlyScan = 1;
-            //moveOld(100,0);
-            //moveOld(100,0);
-            pb2Pressed = 0;
-        }
-        if(pb3Pressed){
-            // Start scanning closest wall with wall follow
-            setScannerSpeed(6);
-            scanRunning = 1;
-            distanceTraveled = 0;
-            onlyScan = 0;
-            pb3Pressed = 0;
-        }     
+            LED0 = !LED0;
+        }  
         
         //Use patternHandler to update the patterns
         updatePatterns();
@@ -128,7 +105,7 @@ void main (void){
         //Update the LCD with the distance travelled and check bumper sensors
         if(!scanRunning&&!movingToWall){
             //Update the LCD with the distance travelled and check bumper sensors
-            updateSensors();// LOOK! Freezes program if not connected to robot
+            //updateSensors();// LOOK! Freezes program if not connected to robot
         }
         
     }
