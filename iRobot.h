@@ -50,7 +50,10 @@ char patternStage = 0;
 int lastValueOff = 0;
 char activateLostWall = 0;
 char lostWallCounter = 0;
+char turning = 0;
+char movingStraight = 0;
 
+char followPatternStage = 0;
 bit boostActivated = 0;
 
 #endif	/* IROBOT_H */

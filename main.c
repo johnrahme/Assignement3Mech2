@@ -78,6 +78,7 @@ void main (void){
     writeAdvancedMap();
     setStartPos(WEST,1,2);
     victimsFound = 0;
+    //moveOld(100,0);
     
     // Start the adc conversion
     startADCConversion();
@@ -86,7 +87,7 @@ void main (void){
         //Check ADC coversion
         if(conversionDone){ //Check conversion done flags
             conversionDone = 0; 
-            //printADCData(); //Prints the conversion data to the LCD
+            printADCData(); //Prints the conversion data to the LCD
         }
 
         
@@ -94,10 +95,19 @@ void main (void){
             // Start the straight pattern
             distanceTraveled = 0; //added in to 0 the total distance traveled at the start of the function
             navigateMazePatternStart = 1;
+            followWallPatternStart = 1;
+            followPatternStage = 0;
             patternDone = 0;
             pb1Pressed = 0;
             LED0 = !LED0;
+            
         }  
+        if(pb2Pressed){
+            setScannerSpeed(1);
+            scanRunning = 1;
+            pb2Pressed = 0;
+            followWallPatternStart = 1;
+        }
         
         //Use patternHandler to update the patterns
         updatePatterns();

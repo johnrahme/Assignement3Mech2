@@ -50,6 +50,12 @@ void updateMovePattern(){
         RTC_LOST_WALL_FLAG = 1;
         RTC_LOST_WALL_COUNTER = 0;
     }
+    //Update timer for navigation pattern
+    RTC_FOLLOW_PATTERN_COUNTER++;
+      if(RTC_FOLLOW_PATTERN_COUNTER == FOLLOW_PATTERN_TIME){
+            RTC_FLAG_FOLLOW_PATTERN = 1;
+            RTC_FOLLOW_PATTERN_COUNTER = 0;
+      }
 }
 
 

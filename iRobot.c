@@ -110,14 +110,65 @@ void turnDegreesCCW(int degrees){
     
 }
 //-----MOVE PATTERNS START-----
-
+//Follow wall pattern for the maze
+char followWallPatternV3(){
+    //Check if the move pattern flag has been raised
+    if(followPatternStage == 0|| (followPatternStage == 1 && RTC_FLAG_FOLLOW_PATTERN)){
+        //Reset counter
+        RTC_FOLLOW_PATTERN_COUNTER = 0; 
+        FOLLOW_PATTERN_TIME = 10; //How often to update
+        int valueOff = latestReadMeterValue-50;
+        valueOff*10; // Convert To millimeters
+        int speedRightWheel = 0;
+        int speedLeftWheel = 0;
+        char divideBy = 1;
+        char times = 1;
+        char wallToFar = 0;
+        
+        //If the distance is far make the divideBy factor bigger so as not to turn to fast
+        if((valueOff>30)){
+            wallToFar = 1;
+        }
+        //If the robot is really close to the edge turn really fast
+        
+        //Check if the boost has been activated whenever the wall has been lost
+        if(boostActivated&&valueOff>10){
+            
+            times = times*6;
+        }
+        //Set the wheel speed
+        if(wallToFar){
+            speedRightWheel = 200;
+            speedLeftWheel = 200;
+            
+        }
+        else{
+            speedRightWheel = 200+valueOff/divideBy*times;
+            speedLeftWheel = 200-valueOff/divideBy*times;
+        }
+        
+         //Check if it lost the wall
+         
+        
+        lastValueOff = valueOff;
+        //Use turn and drive direct functions
+        turnAndDriveDirect(speedRightWheel,speedLeftWheel);
+        //Do not increment patternStage since we want this function to run forever, unless its stage 0
+        if(followPatternStage == 0){
+             followPatternStage++;
+        }
+       
+        //Reset Pattern Flag
+        RTC_FLAG_FOLLOW_PATTERN = 0;
+    }
+}
 //This pattern makes the robot follow the wall, version 2 uses drive direct and is smoother than version 1
 char followWallPatternV2(){
     //Check if the move pattern flag has been raised
-    if(patternStage == 0|| (patternStage == 1 && RTC_FLAG_MOVE_PATTERN)){
+    if(followPatternStage == 0|| (followPatternStage == 1 && RTC_FLAG_FOLLOW_PATTERN)){
         //Reset counter
-        RTC_MOVE_PATTERN_COUNTER = 0; 
-        MOVE_PATTERN_TIME = 10; //How often to update
+        RTC_FOLLOW_PATTERN_COUNTER = 0; 
+        FOLLOW_PATTERN_TIME = 10; //How often to update
         int valueOff = latestReadMeterValue-50;
         valueOff*10; // Convert To millimeters
         int speedRightWheel = 0;
@@ -173,12 +224,12 @@ char followWallPatternV2(){
         //Use turn and drive direct functions
         turnAndDriveDirect(speedRightWheel,speedLeftWheel);
         //Do not increment patternStage since we want this function to run forever, unless its stage 0
-        if(patternStage == 0){
-             patternStage++;
+        if(followPatternStage == 0){
+             followPatternStage++;
         }
        
         //Reset Pattern Flag
-        RTC_FLAG_MOVE_PATTERN = 0;
+        RTC_FLAG_FOLLOW_PATTERN = 0;
     }
 }
 
@@ -298,6 +349,8 @@ char navigateMazePattern(char distance, int degrees)
             RTC_FLAG_MOVE_PATTERN = 1;
     }
     if(patternStage == 0){
+        turning = 1;
+        movingStraight = 0;
         if(degrees<0){
             turnDegreesCCW(-degrees);
         }
@@ -313,6 +366,8 @@ char navigateMazePattern(char distance, int degrees)
         lcdWriteString("Turning");
     }
     else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 1){
+        turning = 0;
+        movingStraight = 1;
         moveDistanceForward(distance);
         //increment pattern stage
         patternStage++;

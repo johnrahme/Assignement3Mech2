@@ -42,10 +42,11 @@ char updateScanner() {
     //First rotate and store closes wall
     if (RTC_MOVE_SM_FLAG && scanRunning) {
         RTC_MOVE_SM_FLAG = 0;
-        if (scanStepNumber < stepsToMove) { //if scanner step number is less than steps to move
-            scanStepNumber++; //increment scanner step number
+        LED0 = !LED0;
+        scanStepNumber++; //increment scanner step number
+        if (scanStepNumber < 100) { //if scanner step number is less than steps to move
             move(0); //move in direction 0(clockwise)
-            checkClosestDistance();
+            //checkClosestDistance();
         } else { //otherwise;
             scanStepNumber = 0; //clear scanner step number
             scanRunning = 0; //clear scan running
@@ -58,12 +59,14 @@ char updateScanner() {
     if (movingToWall && RTC_MOVE_SM_FLAG) { //if scanner is rotating to face wall and stepper motor flag is raised
         RTC_MOVE_SM_FLAG = 0; //clear flag
         scanStepNumber++; //increment scanner/stepper motor step number
-        if (scanStepNumber < (stepsToMove - smallestValueStep)) { //if scanner/stepper motor step number is less than the difference between steps required to move and the smallest stepper value
+        if (scanStepNumber < 100) { //if scanner/stepper motor step number is less than the difference between steps required to move and the smallest stepper value
             move(1); //move in direction 1(counter-clockwise))
         } else { //otherwise;
             movingToWall = 0; //do not rotate scanner to face wall
+            scanRunning = 1;
+            scanStepNumber = 0;
             stepsFromOrigin = smallestValueStep;
-            updateScannerBuffer();
+            //updateScannerBuffer();
             return 1; //return 1(meaning sequence is complete)
         }
     }
