@@ -80,6 +80,8 @@ void main (void){
     victimsFound = 0;
     int moveToVariable = 0;
     //moveOld(100,0);
+    lcdSetCursor(0x08);
+    lcdWriteToDigitBCD(6,4,0);
     
     // Start the adc conversion
     startADCConversion();
@@ -106,9 +108,9 @@ void main (void){
         if(pb2Pressed){
             setScannerSpeed(1);
             
-            if(!updatingPosition){
+            if(!updatingScannerPosition){
                 moveScannerTo = moveToVariable;
-                updatingPosition = 1;
+                updatingScannerPosition = 1;
             } 
             pb2Pressed = 0;
             

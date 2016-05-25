@@ -47,7 +47,7 @@ void writeAdvancedMap(){
     writeMapSegment(2,2,0b00001010); //2,2
     writeMapPriority(2,2,4);   
     
-    writeMapSegment(2,3,0b00000000); //2,3
+    writeMapSegment(2,3,0b00000100); //2,3 //Should maybe be changed, this is the cliff se
     writeMapPriority(2,3,5);
     
     writeMapSegment(1,3,0b00001101); //1,3
@@ -89,7 +89,7 @@ void writeAdvancedMap(){
     writeMapSegment(2,5,0b00000100);
     writeMapPriority(2,5,11);
     
-    writeMapSegment(2,4,0b00001010);
+    writeMapSegment(2,4,0b00001011); //Cliff set as wall
     writeMapPriority(2,4,12);
     
     writeMapSegment(1,5,0b00001100);

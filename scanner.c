@@ -37,7 +37,7 @@ void updateScannerBuffer() {
     smallestValueStep = 0;
 }
 void moveToPositionFromOrigin(int steps){
-    if(RTC_MOVE_SM_FLAG&&updatingPosition){
+    if(RTC_MOVE_SM_FLAG&&updatingScannerPosition){
         int stepsToMove = steps-stepsFromOrigin;
         char direction = CLOCKWISE;
         if(stepsToMove<0){
@@ -51,7 +51,7 @@ void moveToPositionFromOrigin(int steps){
             move(direction); //move in direction
         } else { //otherwise;
             scanStepNumber = 0; //clear scanner step number
-            updatingPosition = 0;//clear scan running
+            updatingScannerPosition = 0;//clear scan running
             stepsFromOrigin = steps;
             lcdSetCursor(0x40);
             lcdWriteToDigitBCD(stepsFromOrigin,3,1);

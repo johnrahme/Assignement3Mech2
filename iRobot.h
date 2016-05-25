@@ -26,6 +26,9 @@
 #define		PLAY_SONG		141			//play a song (0 - 15)
 #define		SONG			140			//define a song
 #define     DRIVE_DIRECT    145         //Set drive direct
+
+
+
 int distanceTraveled = 0;
 
 void setupIRobot(void);
@@ -43,6 +46,7 @@ void turnAndDriveDirect(int rightVelocity, int leftVelocity);
 
 char followWallPattern();
 char followWallPatternV2();
+char followWallPatternV3(char right);
 
 char navigateMazePattern(char distance, int degrees);
 
@@ -55,6 +59,13 @@ char movingStraight = 0;
 
 char followPatternStage = 0;
 bit boostActivated = 0;
+char mazePatternStage = 0;
+
+char enteredFrontStage = 0;
+char enteredFollowStage = 0;
+
+char turnScannerFrontFlag = 0;
+char turnScannerFollowFlag = 0;
 
 #endif	/* IROBOT_H */
 

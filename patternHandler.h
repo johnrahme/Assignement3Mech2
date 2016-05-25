@@ -6,6 +6,7 @@
 #include "scanner.h"
 #include "iRobot.h"
 #include "mapNav.h"
+#include "eeprom.h"
 
 char patternDone = 1;
 char squarePatternDone = 1;
@@ -17,6 +18,7 @@ char followWallPatternStart = 0;
 char navigateMazePatternStart = 0;
 char updateMap = 1;
 int degreesToTurn = 0;
+char wallFollowDirection = 1;
     
     //Check if the robot should scan for closest wall or scan and move to closest wall
 char onlyScan = 1;

@@ -111,18 +111,18 @@ void turnDegreesCCW(int degrees){
 }
 //-----MOVE PATTERNS START-----
 //Follow wall pattern for the maze
-char followWallPatternV3(){
+char followWallPatternV3(char right){
     //Check if the move pattern flag has been raised
     if(followPatternStage == 0|| (followPatternStage == 1 && RTC_FLAG_FOLLOW_PATTERN)){
         //Reset counter
         RTC_FOLLOW_PATTERN_COUNTER = 0; 
         FOLLOW_PATTERN_TIME = 10; //How often to update
-        int valueOff = latestReadMeterValue-50;
+        int valueOff = latestReadMeterValue-65;
         valueOff*10; // Convert To millimeters
         int speedRightWheel = 0;
         int speedLeftWheel = 0;
         char divideBy = 1;
-        char times = 1;
+        char times = 2;
         char wallToFar = 0;
         
         //If the distance is far make the divideBy factor bigger so as not to turn to fast
@@ -131,11 +131,7 @@ char followWallPatternV3(){
         }
         //If the robot is really close to the edge turn really fast
         
-        //Check if the boost has been activated whenever the wall has been lost
-        if(boostActivated&&valueOff>10){
-            
-            times = times*6;
-        }
+        
         //Set the wheel speed
         if(wallToFar){
             speedRightWheel = 200;
@@ -152,7 +148,13 @@ char followWallPatternV3(){
         
         lastValueOff = valueOff;
         //Use turn and drive direct functions
-        turnAndDriveDirect(speedRightWheel,speedLeftWheel);
+        if(right){
+             turnAndDriveDirect(speedLeftWheel,speedRightWheel);
+        }
+        else{
+             turnAndDriveDirect(speedRightWheel,speedLeftWheel);
+        }
+       
         //Do not increment patternStage since we want this function to run forever, unless its stage 0
         if(followPatternStage == 0){
              followPatternStage++;
@@ -362,13 +364,16 @@ char navigateMazePattern(char distance, int degrees)
         RTC_MOVE_PATTERN_COUNTER = 0; 
         //Reset Pattern Flag
         RTC_FLAG_MOVE_PATTERN = 0;
+        enteredFollowStage = 1;
         lcdSetCursor(0x0A);
         lcdWriteString("Turning");
     }
     else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 1){
+        enteredFollowStage = 1;
         turning = 0;
         movingStraight = 1;
-        moveDistanceForward(distance);
+        
+        moveDistanceForward(distance/2);
         //increment pattern stage
         patternStage++;
         //Reset Pattern Flag
@@ -377,6 +382,18 @@ char navigateMazePattern(char distance, int degrees)
         lcdWriteString("Forward");
     }
     else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 2){
+        turning = 0;
+        movingStraight = 1;
+        enteredFrontStage = 1;
+        moveDistanceForward(distance/2);
+        //increment pattern stage
+        patternStage++;
+        //Reset Pattern Flag
+        RTC_FLAG_MOVE_PATTERN = 0;
+        lcdSetCursor(0x0A);
+        lcdWriteString("Forward");
+    }
+    else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 3){
         //increment pattern stage
         patternStage = 0;
         //Reset Pattern Flag

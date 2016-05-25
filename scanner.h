@@ -18,7 +18,7 @@ int stepsFromOrigin = 0;
 int lastReadSmallestDistance = 20000;
 int lastReadSmallestStepDegree = 0;
 
-char updatingPosition = 0;
+char updatingScannerPosition = 0;
 
 
 
