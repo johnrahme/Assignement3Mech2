@@ -23,8 +23,6 @@ void updatePatterns() {
     if(navigateMazePatternStart){
         if(updateMap){
             degreesToTurn = moveSegment();
-            lcdSetCursor(0x00);
-            lcdWriteToDigitBCD(degreesToTurn, 3, 1);
             updateMap = 0;
             
         }
@@ -37,6 +35,9 @@ void updatePatterns() {
     if(followWallPatternStart&&movingStraight){
        followWallPatternV3();
     }
+    
+    //Move to specific location
+    moveToPositionFromOrigin(moveScannerTo);
     //updateScanner();
    
 }

@@ -18,12 +18,18 @@ int stepsFromOrigin = 0;
 int lastReadSmallestDistance = 20000;
 int lastReadSmallestStepDegree = 0;
 
+char updatingPosition = 0;
+
+
+
 char resetSensorToWallFollowFlag = 0;
+int moveScannerTo = 0;
 
 char updateScanner();
 void updateScannerOldWay();
 void setScannerSpeed(char speed);
 void resetSensorToWallFollow();
+void moveToPositionFromOrigin(int steps);
 
 void resetScanner();
 

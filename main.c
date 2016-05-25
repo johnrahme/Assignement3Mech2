@@ -78,6 +78,7 @@ void main (void){
     writeAdvancedMap();
     setStartPos(WEST,1,2);
     victimsFound = 0;
+    int moveToVariable = 0;
     //moveOld(100,0);
     
     // Start the adc conversion
@@ -104,9 +105,25 @@ void main (void){
         }  
         if(pb2Pressed){
             setScannerSpeed(1);
-            scanRunning = 1;
+            
+            if(!updatingPosition){
+                moveScannerTo = moveToVariable;
+                updatingPosition = 1;
+            } 
             pb2Pressed = 0;
-            followWallPatternStart = 1;
+            
+        }
+        if(pb3Pressed){
+            moveToVariable +=10;
+            lcdSetCursor(0x45);
+            lcdWriteToDigitBCD(moveToVariable,3,1);
+            pb3Pressed = 0;
+        }
+        if(pb0Pressed){
+            moveToVariable -=10;
+            lcdSetCursor(0x45);
+            lcdWriteToDigitBCD(moveToVariable,3,1);
+            pb0Pressed = 0;
         }
         
         //Use patternHandler to update the patterns

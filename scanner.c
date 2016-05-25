@@ -36,7 +36,28 @@ void updateScannerBuffer() {
     smallestDistance = 20000;
     smallestValueStep = 0;
 }
-
+void moveToPositionFromOrigin(int steps){
+    if(RTC_MOVE_SM_FLAG&&updatingPosition){
+        int stepsToMove = steps-stepsFromOrigin;
+        char direction = CLOCKWISE;
+        if(stepsToMove<0){
+            direction= COUNTER_CLOCKWISE;
+            stepsToMove = -stepsToMove;
+        }
+        RTC_MOVE_SM_FLAG = 0;
+        LED0 = !LED0;
+        scanStepNumber++; //increment scanner step number
+        if (scanStepNumber < stepsToMove) { //if scanner step number is less than steps to move
+            move(direction); //move in direction
+        } else { //otherwise;
+            scanStepNumber = 0; //clear scanner step number
+            updatingPosition = 0;//clear scan running
+            stepsFromOrigin = steps;
+            lcdSetCursor(0x40);
+            lcdWriteToDigitBCD(stepsFromOrigin,3,1);
+        }
+    }
+}
 char updateScanner() {
 
     //First rotate and store closes wall
