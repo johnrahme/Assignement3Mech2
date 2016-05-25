@@ -51,9 +51,9 @@ void updatePatterns() {
             }
         }
     }
-    //Update the scanner and see if the sensor should be reset or not
+    //Follow wall if robot is moving straight and not turning the scanner
     
-    if(followWallPatternStart&&patternStage==1&&!updatingScannerPosition){
+    if(followWallPatternStart&&patternStage==2&&!updatingScannerPosition){
        followWallPatternV3(wallFollowDirection);
     }
     

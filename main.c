@@ -81,7 +81,7 @@ void main (void){
     int moveToVariable = 0;
     //moveOld(100,0);
     lcdSetCursor(0x08);
-    lcdWriteToDigitBCD(6,4,0);
+    lcdWriteToDigitBCD(7,4,0);
     
     // Start the adc conversion
     startADCConversion();
