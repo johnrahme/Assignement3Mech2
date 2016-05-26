@@ -43,10 +43,13 @@ int getTraveledDistance(void);
 void updateSensors(void);
 char moveTowardsWallPattern(int degree, int distance);
 void turnAndDriveDirect(int rightVelocity, int leftVelocity);
+char getCliffSensors();
+
 
 char followWallPattern();
 char followWallPatternV2();
 char followWallPatternV3(char right);
+char findCliffPattern();
 
 char navigateMazePattern(char distance, int degrees);
 
@@ -66,6 +69,8 @@ char enteredFollowStage = 0;
 
 char turnScannerFrontFlag = 0;
 char turnScannerFollowFlag = 0;
+
+int distanceToCliff = 0;
 
 #endif	/* IROBOT_H */
 

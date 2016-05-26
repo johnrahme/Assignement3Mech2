@@ -12,6 +12,12 @@ void setupIRobot(void){
 void drive(void){
     ser_putch(DRIVE); __delay_ms(5); ser_putch(0); __delay_ms(5); ser_putch(200); __delay_ms(5); ser_putch(127); __delay_ms(5); ser_putch(255);__delay_ms(5);
 }
+void driveBack(void){
+    ser_putch(DRIVE); __delay_ms(5); ser_putch(255); __delay_ms(5); ser_putch(56); __delay_ms(5); ser_putch(127); __delay_ms(5); ser_putch(255);__delay_ms(5);
+}
+void driveSlow(){
+    ser_putch(DRIVE); __delay_ms(5); ser_putch(0); __delay_ms(5); ser_putch(100); __delay_ms(5); ser_putch(127); __delay_ms(5); ser_putch(255);__delay_ms(5);
+}
 //This function sets the wheel speeds independently
 void turnAndDriveDirect(int rightVelocity, int leftVelocity){
     //High and low byte for right wheel
@@ -86,6 +92,16 @@ void moveDistanceForward(int centimeters){
     //Set the time for the counter to wait until next step in pattern
     MOVE_PATTERN_TIME = totalTimeToMove;
     drive();
+}
+//Move forward a specified number of centimeters
+void moveDistanceBackwards(int centimeters){
+    RTC_MOVE_PATTERN_COUNTER = 0; //Reset the counter
+    // 21053/4/100 = 52.6325 ---> milliseconds to move one centimeter
+    float timeToMoveOneCentimeter = 52.6325; // Should probably be a float number instead
+    int totalTimeToMove = centimeters*timeToMoveOneCentimeter;
+    //Set the time for the counter to wait until next step in pattern
+    MOVE_PATTERN_TIME = totalTimeToMove;
+    driveBack();
 }
 //Turn degrees clockwise a specified amount of degrees
 void turnDegreesCW(int degrees){
@@ -164,185 +180,35 @@ char followWallPatternV3(char right){
         RTC_FLAG_FOLLOW_PATTERN = 0;
     }
 }
-//This pattern makes the robot follow the wall, version 2 uses drive direct and is smoother than version 1
-char followWallPatternV2(){
-    //Check if the move pattern flag has been raised
-    if(followPatternStage == 0|| (followPatternStage == 1 && RTC_FLAG_FOLLOW_PATTERN)){
-        //Reset counter
-        RTC_FOLLOW_PATTERN_COUNTER = 0; 
-        FOLLOW_PATTERN_TIME = 10; //How often to update
-        int valueOff = latestReadMeterValue-50;
-        valueOff*10; // Convert To millimeters
-        int speedRightWheel = 0;
-        int speedLeftWheel = 0;
-        char divideBy = 1;
-        char times = 1;
-        
-        //If the distance is far make the divideBy factor bigger so as not to turn to fast
-        if((valueOff>80)){
-            divideBy = 14; 
-        }
-        //If the robot is really close to the edge turn really fast
-        else if(valueOff<-5){
-            times = 15;
-        }
-        //Check if the boost has been activated whenever the wall has been lost
-        if(boostActivated&&valueOff>10){
-            
-            times = times*6;
-        }
-        //Set the wheel speed
-         speedRightWheel = 200+valueOff/divideBy*times;
-         speedLeftWheel = 200-valueOff/divideBy*times;
-        
-         //Check if it lost the wall
-         
-         //Check if the sensor has lost the wall and raise lost wall flag
-        if(lastValueOff < 10 && valueOff > 20 && !activateLostWall){
-            
-            activateLostWall = 1;
-            RTC_LOST_WALL_FLAG = 0;
-            RTC_LOST_WALL_COUNTER = 0;
-            LOST_WALL_TIME = 4000;
-        }
-        //If the lost wall timer is done, turn fast
-        if(RTC_LOST_WALL_FLAG&&activateLostWall){
-            //If the lost wall flag has been raised activate boost
-            RTC_LOST_WALL_FLAG = 0;
-           if(lostWallCounter == 0){
-               LED0 = !LED0;
-               lostWallCounter++;
-               boostActivated = 1;
-           }
-            //When the lost wall flag is raised the second time deactivate boost
-           else{
-               LED0 = !LED0;
-               activateLostWall = 0;
-               boostActivated = 0;
-               lostWallCounter = 0;
-           }       
-        }
-        lastValueOff = valueOff;
-        //Use turn and drive direct functions
-        turnAndDriveDirect(speedRightWheel,speedLeftWheel);
-        //Do not increment patternStage since we want this function to run forever, unless its stage 0
-        if(followPatternStage == 0){
-             followPatternStage++;
-        }
-       
-        //Reset Pattern Flag
-        RTC_FLAG_FOLLOW_PATTERN = 0;
-    }
-}
 
-
-//Move towards the wall and then turn 90 degrees
-char moveTowardsWallPattern(int degree, int distance)
-{
-    //Turn back to face the wall
-    if(patternStage == 0){
-        //turn a specified amount of degrees
-        turnDegreesCCW(degree);
-        //increment pattern stage
-        patternStage++;
-        //Reset Pattern Flag
-        RTC_FLAG_MOVE_PATTERN = 0;
-    }
-    //Move towards the wall
-    if(patternStage == 1&&RTC_FLAG_MOVE_PATTERN){
-        if(distance > 15){
-            moveDistanceForward(distance);
-            //Reset Pattern Flag
-            RTC_FLAG_MOVE_PATTERN = 0;
-        }
-        patternStage++;
-    }
-    //Turn 90 degrees
-    if(patternStage == 2&&RTC_FLAG_MOVE_PATTERN){
-        
-        turnDegreesCW(90);
-        //increment pattern stage
-        patternStage++;
-        //Reset Pattern Flag
-        RTC_FLAG_MOVE_PATTERN = 0;
-    }
-    //Stops
-    else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 3){
-        //End of pattern stop the motor
-        stop();
-        //Reset pattern stage
-        patternStage = 0;
-        RTC_FLAG_MOVE_PATTERN = 0;
-        
-        // Return 1 to show that pattern is over
-        return 1;
-    }
-    //Return 0 if pattern is not over
-    return 0;
-}
-
-//Pattern for moving straight 400 meters
-char moveStraightPattern()
-{
-    if(patternStage == 0){
-        //Move forward 400 cm
-        moveDistanceForward(400);
-        //increment pattern stage
-        patternStage++;
-        //Reset Pattern Flag
-        RTC_FLAG_MOVE_PATTERN = 0;
-    }
-    else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 1){
-        //End of pattern stop the motor
-        stop();
-        //Reset pattern stage
-        patternStage = 0;
-        RTC_FLAG_MOVE_PATTERN = 0;
-        
-
-        // Return 1 to show that pattern is over
-        return 1;
-    }
-    //Return 0 if pattern is not over
-    return 0;
-}
-
-// Move Square pattern
-char moveSquarePattern(){
+char findCliffPattern(){
     
-    // Pattern stage 0, 2, 4 and 6 should move forward
-    if(patternStage == 0||(RTC_FLAG_MOVE_PATTERN&&patternStage == 2)||(RTC_FLAG_MOVE_PATTERN&&patternStage == 4)||(RTC_FLAG_MOVE_PATTERN&&patternStage == 6)){
-        //Move forward 100 cm
-        moveDistanceForward(100);
-        //increment pattern stage
-        patternStage++;
-        //Reset Pattern Flag
-        RTC_FLAG_MOVE_PATTERN = 0;
+    if(patternStage == 0){
+        distanceToCliff +=getTraveledDistance();
+        driveSlow();
+        
+        if(getCliffSensors()){
+            
+            patternStage++;
+        }
+        lcdSetCursor(0x0A);
+        lcdWriteToDigitBCD(distanceToCliff,3,0);
     }
-    // Pattern stage 1, 3, 5, and 7 should turn the robot
-    else if((RTC_FLAG_MOVE_PATTERN&&patternStage == 1)||(RTC_FLAG_MOVE_PATTERN&&patternStage == 3) || (RTC_FLAG_MOVE_PATTERN&&patternStage == 5)|| (RTC_FLAG_MOVE_PATTERN&&patternStage == 7)){
-        //Turn 0+ degrees
-        turnDegreesCW(90);
-        //increment pattern stage
-        patternStage++;
-        //Reset Pattern Flag
+    else if (patternStage == 1){
+        RTC_MOVE_PATTERN_COUNTER = 0;
         RTC_FLAG_MOVE_PATTERN = 0;
+        moveDistanceBackwards(distanceToCliff/10);
+        LED0 = !LED0;
+        patternStage++;
     }
-    // Stop the robot
-    else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 8){
-        //End of pattern stop the motor
-        stop();
-        //Reset pattern stage
-        patternStage = 0;
+    else if (patternStage == 2 && RTC_FLAG_MOVE_PATTERN){
+        LED0 = !LED0;
         RTC_FLAG_MOVE_PATTERN = 0;
         
-        // Return 1 to show that pattern is over
         return 1;
     }
-    //Return 0 if pattern is not over
     return 0;
 }
-
 
 char navigateMazePattern(char distance, int degrees)
 {

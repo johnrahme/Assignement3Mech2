@@ -25,6 +25,31 @@ void updatePatterns() {
         updateSensors();// LOOK! Freezes program if not connected to robot
     }
     
+    //Special case for cliff check
+    if(currentX == 2 && currentY == 4 && orientation == EAST&&movingStraight){
+        movingToCliff = 1;
+        if(resetDistanceReader){
+            resetDistanceReader = 0;
+            getTraveledDistance();
+            patternStage = 0;
+            distanceToCliff = 0;
+        }
+        navigateMazePatternStart = 0;
+        if(findCliffPattern()){
+            
+            navigateMazePatternStart = 1;
+            updateMap = 1;
+            patternStage = 0;
+            // set the cliff to a wall
+            writeMapSegment(2,4,0b00001011);
+            writeMapSegment(2,3,0b00000100);
+            currentX = prevX;
+            currentY = prevY;
+            movingToCliff = 0;
+        }
+        
+    }
+    
     if(navigateMazePatternStart){
         if(patternStage == 3){
             if(checkFrontWall()){
@@ -41,10 +66,6 @@ void updatePatterns() {
                 wallFollowDirection = 0;
                 
             }
-            lcdSetCursor(0x08);
-            lcdWriteString("D:");
-            lcdSetCursor(0x0B);
-            lcdWriteToDigitBCD(wallFollowDirection,1,0);
             //int scannerSteps = getScannerLocation();
             updateMap = 0;
             
@@ -70,7 +91,7 @@ void updatePatterns() {
     }
     //Follow wall if robot is moving straight and not turning the scanner
     
-    if(followWallPatternStart&&patternStage==2&&!updatingScannerPosition){
+    if(followWallPatternStart&&patternStage==2&&!updatingScannerPosition&&!movingToCliff){
        followWallPatternV3(wallFollowDirection);
     }
     

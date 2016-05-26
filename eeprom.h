@@ -16,6 +16,9 @@ signed char orientation = 0;
 signed char currentX = 0;
 signed char currentY = 0;
 
+signed char prevX = 0;
+signed char prevY = 0;
+
 void writeAdvancedMap();
 
 #endif	/*EEPROM_H */

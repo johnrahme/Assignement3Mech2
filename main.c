@@ -80,19 +80,18 @@ void main (void){
     char startOrientation = WEST;
     char startX = 1;
     char startY = 2;
-    setStartPos(WEST,1,2);
     victimsFound = 0;
     int moveToVariable = 0;
     
     
     printPosition(startX, startY, startOrientation);
     
-   
     
     
     // Start the adc conversion
     startADCConversion();
-    while(1){   
+    while(1){  
+       
         //move(10,0);
         //Check ADC coversion
         if(conversionDone){ //Check conversion done flags

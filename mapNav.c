@@ -44,6 +44,10 @@ bit canMove(char direction){
 
 int turn(signed char direction){
     char newOrientation = 0;
+    
+    prevX = currentX;
+    prevY = currentY;
+    
     switch(direction){
         case NORTH:
             currentX = northX;
@@ -214,8 +218,7 @@ int getWallFollowDirection(){
     }
     
     int result = orientation-wallAt;
-    lcdSetCursor(0x06);
-    lcdWriteToDigitBCD(result,1,1);
+    //This is a algoritm to see if the robot shold turn right or left, 1 is right, 0 is left
     if(result == -1 || result == 3){
         return 1;
     }

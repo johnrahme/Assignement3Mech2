@@ -15,6 +15,8 @@
 
 	signed char eastX = 0; // east segment x
 	signed char eastY = 0;	// east segment y
+    
+    char checkCliffOnce = 0;
     int  moveSegment();
     void printPosition(char x, char y, char dir);
     int getWallFollowDirection();
