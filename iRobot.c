@@ -10,7 +10,7 @@ void setupIRobot(void){
 
 //Drive straight forward
 void drive(void){
-    ser_putch(DRIVE); __delay_ms(5); ser_putch(0); __delay_ms(5); ser_putch(200); __delay_ms(5); ser_putch(127); __delay_ms(5); ser_putch(255);__delay_ms(5);
+    ser_putch(DRIVE); __delay_ms(5); ser_putch(1); __delay_ms(5); ser_putch(144); __delay_ms(5); ser_putch(127); __delay_ms(5); ser_putch(255);__delay_ms(5);
 }
 void driveBack(void){
     ser_putch(DRIVE); __delay_ms(5); ser_putch(255); __delay_ms(5); ser_putch(56); __delay_ms(5); ser_putch(127); __delay_ms(5); ser_putch(255);__delay_ms(5);
@@ -87,7 +87,8 @@ void stop(void){
 void moveDistanceForward(int centimeters){
     RTC_MOVE_PATTERN_COUNTER = 0; //Reset the counter
     // 21053/4/100 = 52.6325 ---> milliseconds to move one centimeter
-    float timeToMoveOneCentimeter = 52.6325; // Should probably be a float number instead
+    
+    float timeToMoveOneCentimeter = 52.6325/2; // Should probably be a float number instead
     int totalTimeToMove = centimeters*timeToMoveOneCentimeter;
     //Set the time for the counter to wait until next step in pattern
     MOVE_PATTERN_TIME = totalTimeToMove;
@@ -132,13 +133,13 @@ char followWallPatternV3(char right){
     if(followPatternStage == 0|| (followPatternStage == 1 && RTC_FLAG_FOLLOW_PATTERN)){
         //Reset counter
         RTC_FOLLOW_PATTERN_COUNTER = 0; 
-        FOLLOW_PATTERN_TIME = 10; //How often to update
+        FOLLOW_PATTERN_TIME = 5; //How often to update
         int valueOff = latestReadMeterValue-65;
         valueOff*10; // Convert To millimeters
         int speedRightWheel = 0;
         int speedLeftWheel = 0;
         char divideBy = 1;
-        char times = 2;
+        char times = 3;
         char wallToFar = 0;
         
         //If the distance is far make the divideBy factor bigger so as not to turn to fast
@@ -150,13 +151,13 @@ char followWallPatternV3(char right){
         
         //Set the wheel speed
         if(wallToFar){
-            speedRightWheel = 200;
-            speedLeftWheel = 200;
+            speedRightWheel = 400;
+            speedLeftWheel = 400;
             
         }
         else{
-            speedRightWheel = 200+valueOff/divideBy*times;
-            speedLeftWheel = 200-valueOff/divideBy*times;
+            speedRightWheel = 400+valueOff/divideBy*times;
+            speedLeftWheel = 400-valueOff/divideBy*times;
         }
         
          //Check if it lost the wall
