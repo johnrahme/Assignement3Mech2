@@ -59,8 +59,7 @@ void moveToPositionFromOrigin(int steps){
             scanStepNumber = 0; //clear scanner step number
             updatingScannerPosition = 0;//clear scan running
             stepsFromOrigin = steps;
-            lcdSetCursor(0x40);
-            lcdWriteToDigitBCD(stepsFromOrigin,3,1);
+            
         }
     }
 }

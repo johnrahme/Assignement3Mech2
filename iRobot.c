@@ -126,7 +126,7 @@ char followWallPatternV3(char right){
         char wallToFar = 0;
         
         //If the distance is far make the divideBy factor bigger so as not to turn to fast
-        if((valueOff>30)){
+        if((valueOff>40)){
             wallToFar = 1;
         }
         //If the robot is really close to the edge turn really fast
@@ -365,8 +365,6 @@ char navigateMazePattern(char distance, int degrees)
         //Reset Pattern Flag
         RTC_FLAG_MOVE_PATTERN = 0;
         enteredFollowStage = 1;
-        lcdSetCursor(0x0A);
-        lcdWriteString("Turning");
     }
     else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 1){
         enteredFollowStage = 1;
@@ -378,8 +376,6 @@ char navigateMazePattern(char distance, int degrees)
         patternStage++;
         //Reset Pattern Flag
         RTC_FLAG_MOVE_PATTERN = 0;
-        lcdSetCursor(0x0A);
-        lcdWriteString("Forward");
     }
     else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 2){
         turning = 0;
@@ -390,8 +386,6 @@ char navigateMazePattern(char distance, int degrees)
         patternStage++;
         //Reset Pattern Flag
         RTC_FLAG_MOVE_PATTERN = 0;
-        lcdSetCursor(0x0A);
-        lcdWriteString("Forward");
     }
     else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 3){
         //increment pattern stage

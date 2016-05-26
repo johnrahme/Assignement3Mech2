@@ -77,9 +77,15 @@ void main (void){
     LED1 = 0;
     LED0 = 0;
     writeAdvancedMap();
+    char startOrientation = WEST;
+    char startX = 1;
+    char startY = 2;
     setStartPos(WEST,1,2);
     victimsFound = 0;
     int moveToVariable = 0;
+    
+    
+    printPosition(startX, startY, startOrientation);
     
    
     
@@ -95,19 +101,26 @@ void main (void){
         }
 
         
-        if(pb1Pressed){
+        if(pb0Pressed){
             // Start the straight pattern
+            setStartPos(startOrientation,startX,startY);
             distanceTraveled = 0; //added in to 0 the total distance traveled at the start of the function
             navigateMazePatternStart = 1;
             followWallPatternStart = 1;
             followPatternStage = 0;
             patternDone = 0;
-            pb1Pressed = 0;
+            pb0Pressed = 0;
             LED0 = !LED0;
             
         }  
-        if(pb2Pressed){
-            
+        if(pb1Pressed){
+            if(startX==4){
+                startX = 1;
+            }
+            else{
+                startX ++;
+            }
+            printPosition(startX, startY, startOrientation);
             /*
             setScannerSpeed(1);
             
@@ -115,27 +128,41 @@ void main (void){
                 moveScannerTo = moveToVariable;
                 updatingScannerPosition = 1;
             } 
-             
-            pb2Pressed = 0;
-            */
+             */
+            pb1Pressed = 0;
+            
             
             
         }
-        if(pb3Pressed){
+        if(pb2Pressed){
+            if(startY==5){
+                startY = 1;
+            }
+            else{
+                startY ++;
+            }
+            printPosition(startX, startY, startOrientation);
             /*
             moveToVariable +=10;
             lcdSetCursor(0x45);
             lcdWriteToDigitBCD(moveToVariable,3,1);
             */
-            pb3Pressed = 0;
+            pb2Pressed = 0;
         }
-        if(pb0Pressed){
+        if(pb3Pressed){
+            if(startOrientation==3){
+                startOrientation = 0;
+            }
+            else{
+                startOrientation++;
+            }
+            printPosition(startX, startY, startOrientation);
             /*
             moveToVariable -=10;
             lcdSetCursor(0x45);
             lcdWriteToDigitBCD(moveToVariable,3,1);
              **/
-            pb0Pressed = 0;
+            pb3Pressed = 0;
         }
         
         //Use patternHandler to update the patterns

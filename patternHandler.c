@@ -34,11 +34,17 @@ void updatePatterns() {
         }
         if(updateMap){
             degreesToTurn = moveSegment();
-            if(currentX == 1 && currentY == 4){
-                wallFollowDirection = 0;
-                updatingScannerPosition = 1;
-                moveScannerTo = -50;
+            if(getWallFollowDirection()==1){
+                wallFollowDirection = 1;
             }
+            else if(getWallFollowDirection()==0){
+                wallFollowDirection = 0;
+                
+            }
+            lcdSetCursor(0x08);
+            lcdWriteString("D:");
+            lcdSetCursor(0x0B);
+            lcdWriteToDigitBCD(wallFollowDirection,1,0);
             //int scannerSteps = getScannerLocation();
             updateMap = 0;
             

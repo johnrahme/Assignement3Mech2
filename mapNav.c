@@ -194,5 +194,61 @@ int  moveSegment(){
     return 0;
 }
 
+int getWallFollowDirection(){
+    int wallAt = 0;
+    if(orientation==NORTH||orientation==SOUTH){
+        if(readMapSegment(currentX, currentY)&0b00000001){
+            wallAt = WEST;
+        }
+        if(readMapSegment(currentX, currentY)&0b00000100){
+            wallAt = EAST;
+        }
+    }
+    if(orientation==WEST||orientation==EAST){
+        if(readMapSegment(currentX, currentY)&0b00001000){
+            wallAt = NORTH;
+        }
+        if(readMapSegment(currentX, currentY)&0b00000010){
+            wallAt = SOUTH;
+        }
+    }
+    
+    int result = orientation-wallAt;
+    lcdSetCursor(0x06);
+    lcdWriteToDigitBCD(result,1,1);
+    if(result == -1 || result == 3){
+        return 1;
+    }
+    else if(result == 1 || result == -3){
+        return 0;
+    }
+    
+    return 2;
+}
+void printPosition(char x, char y, char dir){
+    lcdSetCursor(0x40);
+    lcdWriteString("X:");
+    lcdWriteToDigitBCD(x,1,0);
+            
+    lcdSetCursor(0x44);
+    lcdWriteString("Y:");
+    lcdWriteToDigitBCD(y,1,0);
+     
+    lcdSetCursor(0x48);
+    if(dir == EAST){
+        lcdWriteString("EAST");
+    }
+    else if(dir == WEST){
+        lcdWriteString("WEST");
+    }
+    else if(dir == SOUTH){
+        lcdWriteString("SOUTH");
+    }
+    else if(dir == NORTH){
+        
+        lcdWriteString("NORTH");
+    }
+}
+
 
 
