@@ -7,6 +7,7 @@
 #include "iRobot.h"
 #include "mapNav.h"
 #include "eeprom.h"
+#include "music.h"
 
 char patternDone = 1;
 char squarePatternDone = 1;

@@ -17,29 +17,42 @@ void initializeMotor(){
 
 //Set the motor to move steps in a specific direction
 void moveOld(int steps, char direction){
+    SELECT_SM();
     if(direction == CLOCKWISE){
         // USes she SPI to set the motor to CW
         setToMotorCW();
+        
     }
     else if(direction == COUNTER_CLOCKWISE){
         // USes she SPI to set the motor to CCW
         setToMotorCCW();
+         
+        
     }
+   
    for(int i = 0; i<steps; i++){
+       SELECT_SM();
         SM_STEP();
+        SELECT_NONE();
         __delay_ms(SPEED);
    }
 }
 void move(char direction){
-    if(direction == CLOCKWISE){
+    if(direction == CLOCKWISE && currentDirection != CLOCKWISE){
         // USes she SPI to set the motor to CW
+        SELECT_SM();
         setToMotorCW();
+        
     }
-    else if(direction == COUNTER_CLOCKWISE){
+    else if(direction == COUNTER_CLOCKWISE && currentDirection !=COUNTER_CLOCKWISE){
         // USes she SPI to set the motor to CCW
+        SELECT_SM();
         setToMotorCCW();
     }
+    
+    SELECT_SM();
     SM_STEP();
+    SELECT_NONE();
 }
 
 //Move the specified degree using the degree per step

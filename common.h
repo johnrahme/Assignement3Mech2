@@ -17,5 +17,8 @@
 #define EAST 1
 
 
+char victimsFound = 0;
+
+
 #endif	/* COMMON_H */
 

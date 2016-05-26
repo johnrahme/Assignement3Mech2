@@ -482,24 +482,27 @@ void updateSensors(){
     if(updateSensorsFlag){
         //Check bumpWheelSensors
         
-        char bumpSensor = getBumpDropSensor();
+        //char bumpSensor = getBumpDropSensor();
         // Check cliff sensors
-        char cliffSensors = getCliffSensors();
-        char bumpSensorResult = bumpSensor&0b00011111;
+        //char cliffSensors = getCliffSensors();
+        //char bumpSensorResult = bumpSensor&0b00011111;
         char forceField = getForceField();
         
         
-        if(bumpSensorResult||cliffSensors ||forceField || getVirtualWall()){
+        if(forceField){
             LED0 = !LED0;
             //Stop all movement
-            stopAllPatterns();
-            //playSong();
+            //stopAllPatterns();
+            victimsFound = 2;
+            playSong();
             
         }
         //Update and write distance travelled
+        /*
         distanceTraveled += getTraveledDistance();
         lcdSetCursor(0x40);
         lcdWriteToDigitBCD(distanceTraveled/10, 4, 0);
+        */
         updateSensorsFlag = 0;
     }
 }

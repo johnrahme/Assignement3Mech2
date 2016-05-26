@@ -15,8 +15,6 @@
 
 	signed char eastX = 0; // east segment x
 	signed char eastY = 0;	// east segment y
-    
-    char victimsFound = 0;
     int  moveSegment();
 
 #endif	/* MAPNAV_H */

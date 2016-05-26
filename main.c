@@ -69,6 +69,7 @@ void setup(void){
     setupLCD();
     initializeADC();
     setupSongs();
+    spi_transfer(0);
 }
 
 void main (void){
@@ -79,9 +80,9 @@ void main (void){
     setStartPos(WEST,1,2);
     victimsFound = 0;
     int moveToVariable = 0;
-    //moveOld(100,0);
-    lcdSetCursor(0x08);
-    lcdWriteToDigitBCD(7,4,0);
+    
+   
+    
     
     // Start the adc conversion
     startADCConversion();
@@ -106,36 +107,41 @@ void main (void){
             
         }  
         if(pb2Pressed){
+            
+            /*
             setScannerSpeed(1);
             
             if(!updatingScannerPosition){
                 moveScannerTo = moveToVariable;
                 updatingScannerPosition = 1;
             } 
+             
             pb2Pressed = 0;
+            */
+            
             
         }
         if(pb3Pressed){
+            /*
             moveToVariable +=10;
             lcdSetCursor(0x45);
             lcdWriteToDigitBCD(moveToVariable,3,1);
+            */
             pb3Pressed = 0;
         }
         if(pb0Pressed){
+            /*
             moveToVariable -=10;
             lcdSetCursor(0x45);
             lcdWriteToDigitBCD(moveToVariable,3,1);
+             **/
             pb0Pressed = 0;
         }
         
         //Use patternHandler to update the patterns
         updatePatterns();
         
-        //Update the LCD with the distance travelled and check bumper sensors
-        if(!scanRunning&&!movingToWall){
-            //Update the LCD with the distance travelled and check bumper sensors
-            //updateSensors();// LOOK! Freezes program if not connected to robot
-        }
+       
         
     }
     

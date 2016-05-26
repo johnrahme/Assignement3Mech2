@@ -33,6 +33,8 @@ void moveToPositionFromOrigin(int steps);
 
 void resetScanner();
 
+char checkFrontWall();
+
 
 #endif	/* SCANNER_H */
 

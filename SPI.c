@@ -11,6 +11,7 @@
 																				 
 **********************************************************************************/
 #include "SPI.h"
+#include "common.h"
 
 void setupSPI(void){
     //PortB
@@ -20,6 +21,7 @@ void setupSPI(void){
     SSPCON = 0b00100000;
     TRISC = 0b11010000;
     PORTC |= 0b00000011;
+    
 
 }
 
@@ -39,11 +41,13 @@ unsigned char spi_transfer(unsigned char data){
 
 void setToMotorCW(){
     //Set full step and motor CW
-    unsigned char controlByte = 0b00001101;
+    unsigned char controlByte = 0b00001001;
     spi_transfer(controlByte);
+    currentDirection = 1;
 }
 void setToMotorCCW(){
     //Set full step and motor CCW
-    unsigned char controlByte = 0b00001111;
+    unsigned char controlByte = 0b00001011;
     spi_transfer(controlByte);
+    currentDirection = 0;
 }

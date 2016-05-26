@@ -36,6 +36,12 @@ void updateScannerBuffer() {
     smallestDistance = 20000;
     smallestValueStep = 0;
 }
+char checkFrontWall(){
+    if(latestReadMeterValue<30){
+        return 1;
+    }
+    return 0;
+}
 void moveToPositionFromOrigin(int steps){
     if(RTC_MOVE_SM_FLAG&&updatingScannerPosition){
         int stepsToMove = steps-stepsFromOrigin;

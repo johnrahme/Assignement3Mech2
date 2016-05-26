@@ -78,11 +78,6 @@ int turn(signed char direction){
         degrees = 90;
     }
     orientation = newOrientation;
-    lcdSetCursor(0x40);
-    lcdWriteToDigitBCD(currentX, 3, 1);
-    
-    lcdSetCursor(0x44);
-    lcdWriteToDigitBCD(currentY, 3, 1);
     
     return degrees;
 }
@@ -110,8 +105,7 @@ char findFastest(){
 }
 int  moveSegment(){
     
-    lcdSetCursor(0x49);
-    lcdWriteToDigitBCD(orientation, 3, 1);
+   
 
     northX = currentX; // The x coordinate to the segment north of the robot
     northY = currentY; // The y coordinate to the segment north of the robot
