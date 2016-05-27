@@ -19,7 +19,7 @@
     char checkCliffOnce = 0;
     int  moveSegment();
     void printPosition(char x, char y, char dir);
-    int getWallFollowDirection();
+    int getWallFollowDirection(char prev);
 
 #endif	/* MAPNAV_H */
 

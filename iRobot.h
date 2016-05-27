@@ -61,6 +61,8 @@ char mazePatternStage = 0;
 char enteredFrontStage = 0;
 char enteredFollowStage = 0;
 
+char followPart = 0;
+
 char turnScannerFrontFlag = 0;
 char turnScannerFollowFlag = 0;
 

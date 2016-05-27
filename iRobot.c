@@ -238,13 +238,24 @@ char navigateMazePattern(char distance, int degrees)
         turning = 0;
         movingStraight = 1;
         
-        moveDistanceForward(distance*5/10);
+        moveDistanceForward(distance*2/10);
         //increment pattern stage
         patternStage++;
         //Reset Pattern Flag
         RTC_FLAG_MOVE_PATTERN = 0;
     }
     else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 2){
+        enteredFollowStage = 1;
+        turning = 0;
+        movingStraight = 1;
+        
+        moveDistanceForward(distance*3/10);
+        //increment pattern stage
+        patternStage++;
+        //Reset Pattern Flag
+        RTC_FLAG_MOVE_PATTERN = 0;
+    }
+    else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 3){
         turning = 0;
         movingStraight = 1;
         enteredFrontStage = 1;
@@ -254,7 +265,7 @@ char navigateMazePattern(char distance, int degrees)
         //Reset Pattern Flag
         RTC_FLAG_MOVE_PATTERN = 0;
     }
-    else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 3){
+    else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 4){
         //increment pattern stage
         patternStage = 0;
         //Reset Pattern Flag

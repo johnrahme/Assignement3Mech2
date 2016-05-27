@@ -198,21 +198,31 @@ int  moveSegment(){
     return 0;
 }
 
-int getWallFollowDirection(){
+int getWallFollowDirection(char prev){
     int wallAt = 7;
+    char x = 0;
+    char y = 0;
+    if(prev){
+        x = prevX;
+        y = prevY;
+    }
+    else{
+        x = currentX;
+        y = currentY;
+    }
     if(orientation==NORTH||orientation==SOUTH){
-        if(readMapSegment(currentX, currentY)&0b00000001){
+        if(readMapSegment(x, y)&0b00000001){
             wallAt = WEST;
         }
-        if(readMapSegment(currentX, currentY)&0b00000100){
+        if(readMapSegment(x, y)&0b00000100){
             wallAt = EAST;
         }
     }
     if(orientation==WEST||orientation==EAST){
-        if(readMapSegment(currentX, currentY)&0b00001000){
+        if(readMapSegment(x, y)&0b00001000){
             wallAt = NORTH;
         }
-        if(readMapSegment(currentX, currentY)&0b00000010){
+        if(readMapSegment(x, y)&0b00000010){
             wallAt = SOUTH;
         }
     }
@@ -225,7 +235,7 @@ int getWallFollowDirection(){
     else if(result == 1 || result == -3){
         return 0;
     }
-    
+    //If no wall found return 2
     return 2;
 }
 void printPosition(char x, char y, char dir){

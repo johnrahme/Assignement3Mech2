@@ -68,7 +68,7 @@ void setup(void){
     setToMotorCW();
     setupLCD();
     initializeADC();
-    setupSongs();
+    //setupSongs();
     spi_transfer(0);
 }
 

@@ -46,7 +46,7 @@ void updatePatterns() {
             writeMapSegment(2,4,0b00001011);
             writeMapSegment(2,3,0b00000100);
             //Make 1,3, south a wall
-            //writeMapSegment(1,3,0b00000110);
+            writeMapSegment(1,3,0b00000110);
             currentX = prevX;
             currentY = prevY;
             movingToCliff = 0;
@@ -55,7 +55,7 @@ void updatePatterns() {
     }
     
     if(navigateMazePatternStart){
-        if(patternStage == 3){
+        if(patternStage == 4){
             if(checkFrontWall()){
                 updateMap = 1;
                 patternStage = 0;
@@ -63,17 +63,25 @@ void updatePatterns() {
         }
         if(updateMap){
             degreesToTurn = moveSegment();
-            if(getWallFollowDirection()==1){
+            if(getWallFollowDirection(0)==1){
                 wallFollowDirection = 1;
             }
-            else if(getWallFollowDirection()==0){
+            else if(getWallFollowDirection(0)==0){
                 wallFollowDirection = 0;
                 
             }
             else{
                 wallFollowDirection = 2;
             }
-            
+            if(getWallFollowDirection(1)==2){
+                hasWall = 0;
+                lcdSetCursor(0x08);
+                lcdWriteString("No wall");
+            }else{
+                hasWall = 1;
+                lcdSetCursor(0x08);
+                lcdWriteString("Has wall");
+            }
             prevWallFollowDirection == wallFollowDirection;
             //int scannerSteps = getScannerLocation();
             updateMap = 0;
@@ -100,7 +108,7 @@ void updatePatterns() {
     }
     //Follow wall if robot is moving straight and not turning the scanner
     
-    if(followWallPatternStart&&patternStage==2&&!updatingScannerPosition&&!movingToCliff&&!noWalls){
+    if(followWallPatternStart&&((patternStage==2&&hasWall)||patternStage==3)&&!updatingScannerPosition&&!movingToCliff){
        followWallPatternV3(wallFollowDirection);
     }
     
