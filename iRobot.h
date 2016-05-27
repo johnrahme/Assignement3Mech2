@@ -44,6 +44,7 @@ void updateSensors(void);
 void turnAndDriveDirect(int rightVelocity, int leftVelocity);
 char getCliffSensors();
 char getVirtualWall();
+char getBumpDropSensor();
 
 
 char followWallPatternV3(char right);

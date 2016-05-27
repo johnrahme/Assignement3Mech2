@@ -28,6 +28,19 @@ void updatePatterns() {
     else{
         followWallPatternStart = 1;
     }*/
+    if(currentX == 2&&currentY == 3 && orientation==WEST&&getBumpDropSensor()){
+        driveBack();
+        __delay_ms(2080);
+        updateMap = 1;
+        writeMapSegment(currentX, currentY, 0b00001100);
+        currentX = prevX;
+        currentY = prevY;
+        //Hardcoded for bump at 2,4
+         
+         patternStage = 0;
+        
+        
+    }
     if(getVirtualWall()){
          driveBack();
         __delay_ms(2080);
@@ -83,7 +96,7 @@ void updatePatterns() {
             patternStage = 0;
             // set the cliff to a wall
             writeMapSegment(2,4,0b00001011);
-            writeMapSegment(2,3,0b00000100);
+            //writeMapSegment(2,3,0b00000100);
             //Make 1,3, south a wall
             writeMapSegment(1,3,0b00000111);
             currentX = prevX;

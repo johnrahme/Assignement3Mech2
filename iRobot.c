@@ -198,7 +198,7 @@ char findCliffPattern(){
     else if (patternStage == 1){
         RTC_MOVE_PATTERN_COUNTER = 0;
         RTC_FLAG_MOVE_PATTERN = 0;
-        moveDistanceBackwards(distanceToCliff/10+10);
+        moveDistanceBackwards(distanceToCliff/10);
         LED0 = !LED0;
         patternStage++;
     }

@@ -37,8 +37,9 @@ void updateScannerBuffer() {
     smallestValueStep = 0;
 }
 char checkFrontWall(){
-    if(latestReadMeterValue<30){
+    if(latestReadMeterValue<40){
         return 1;
+        
     }
     return 0;
 }
