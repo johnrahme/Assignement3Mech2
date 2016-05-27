@@ -10,7 +10,7 @@ void setupIRobot(void){
 
 //Drive straight forward
 void drive(void){
-    ser_putch(DRIVE); __delay_ms(5); ser_putch(1); __delay_ms(5); ser_putch(144); __delay_ms(5); ser_putch(127); __delay_ms(5); ser_putch(255);__delay_ms(5);
+    ser_putch(DRIVE); __delay_ms(5); ser_putch(0); __delay_ms(5); ser_putch(200); __delay_ms(5); ser_putch(127); __delay_ms(5); ser_putch(255);__delay_ms(5);
 }
 void driveBack(void){
     ser_putch(DRIVE); __delay_ms(5); ser_putch(255); __delay_ms(5); ser_putch(56); __delay_ms(5); ser_putch(127); __delay_ms(5); ser_putch(255);__delay_ms(5);
@@ -88,7 +88,7 @@ void moveDistanceForward(int centimeters){
     RTC_MOVE_PATTERN_COUNTER = 0; //Reset the counter
     // 21053/4/100 = 52.6325 ---> milliseconds to move one centimeter
     
-    float timeToMoveOneCentimeter = 52.6325/2; // Should probably be a float number instead
+    float timeToMoveOneCentimeter = 52.6325; // Should probably be a float number instead
     int totalTimeToMove = centimeters*timeToMoveOneCentimeter;
     //Set the time for the counter to wait until next step in pattern
     MOVE_PATTERN_TIME = totalTimeToMove;
@@ -133,7 +133,7 @@ char followWallPatternV3(char right){
     if(followPatternStage == 0|| (followPatternStage == 1 && RTC_FLAG_FOLLOW_PATTERN)){
         //Reset counter
         RTC_FOLLOW_PATTERN_COUNTER = 0; 
-        FOLLOW_PATTERN_TIME = 5; //How often to update
+        FOLLOW_PATTERN_TIME = 10; //How often to update
         int valueOff = latestReadMeterValue-65;
         valueOff*10; // Convert To millimeters
         int speedRightWheel = 0;
@@ -143,7 +143,7 @@ char followWallPatternV3(char right){
         char wallToFar = 0;
         
         //If the distance is far make the divideBy factor bigger so as not to turn to fast
-        if((valueOff>40)){
+        if((valueOff>50)){
             wallToFar = 1;
         }
         //If the robot is really close to the edge turn really fast
@@ -151,13 +151,13 @@ char followWallPatternV3(char right){
         
         //Set the wheel speed
         if(wallToFar){
-            speedRightWheel = 400;
-            speedLeftWheel = 400;
+            speedRightWheel = 200;
+            speedLeftWheel = 200;
             
         }
         else{
-            speedRightWheel = 400+valueOff/divideBy*times;
-            speedLeftWheel = 400-valueOff/divideBy*times;
+            speedRightWheel = 200+valueOff/divideBy*times;
+            speedLeftWheel = 200-valueOff/divideBy*times;
         }
         
          //Check if it lost the wall
@@ -198,7 +198,7 @@ char findCliffPattern(){
     else if (patternStage == 1){
         RTC_MOVE_PATTERN_COUNTER = 0;
         RTC_FLAG_MOVE_PATTERN = 0;
-        moveDistanceBackwards(distanceToCliff/10);
+        moveDistanceBackwards(distanceToCliff/10+10);
         LED0 = !LED0;
         patternStage++;
     }
@@ -238,7 +238,7 @@ char navigateMazePattern(char distance, int degrees)
         turning = 0;
         movingStraight = 1;
         
-        moveDistanceForward(distance/2);
+        moveDistanceForward(distance*5/10);
         //increment pattern stage
         patternStage++;
         //Reset Pattern Flag
@@ -248,7 +248,7 @@ char navigateMazePattern(char distance, int degrees)
         turning = 0;
         movingStraight = 1;
         enteredFrontStage = 1;
-        moveDistanceForward(distance/2);
+        moveDistanceForward(distance*5/10);
         //increment pattern stage
         patternStage++;
         //Reset Pattern Flag

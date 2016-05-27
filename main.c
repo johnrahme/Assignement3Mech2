@@ -107,7 +107,6 @@ void main (void){
             navigateMazePatternStart = 1;
             followWallPatternStart = 1;
             followPatternStage = 0;
-            patternDone = 0;
             pb0Pressed = 0;
             LED0 = !LED0;
             

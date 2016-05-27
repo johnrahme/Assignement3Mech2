@@ -41,13 +41,10 @@ void turnDegreesCCW(int degrees);
 void turnAndDrive(int radius);
 int getTraveledDistance(void);
 void updateSensors(void);
-char moveTowardsWallPattern(int degree, int distance);
 void turnAndDriveDirect(int rightVelocity, int leftVelocity);
 char getCliffSensors();
 
 
-char followWallPattern();
-char followWallPatternV2();
 char followWallPatternV3(char right);
 char findCliffPattern();
 
@@ -55,13 +52,10 @@ char navigateMazePattern(char distance, int degrees);
 
 char patternStage = 0;
 int lastValueOff = 0;
-char activateLostWall = 0;
-char lostWallCounter = 0;
 char turning = 0;
 char movingStraight = 0;
 
 char followPatternStage = 0;
-bit boostActivated = 0;
 char mazePatternStage = 0;
 
 char enteredFrontStage = 0;

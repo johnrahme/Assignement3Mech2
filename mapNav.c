@@ -199,7 +199,7 @@ int  moveSegment(){
 }
 
 int getWallFollowDirection(){
-    int wallAt = 0;
+    int wallAt = 7;
     if(orientation==NORTH||orientation==SOUTH){
         if(readMapSegment(currentX, currentY)&0b00000001){
             wallAt = WEST;
