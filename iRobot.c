@@ -221,11 +221,12 @@ char navigateMazePattern(char distance, int degrees)
         turning = 1;
         movingStraight = 0;
         if(degrees<0){
-            turnDegreesCCW(-degrees);
+            turnDegreesCCW(-degrees-turnBoost);
         }
         else{
-            turnDegreesCW(degrees);
+            turnDegreesCW(degrees+turnBoost);
         }
+        turnBoost = 0;
         patternStage ++;
         
         RTC_MOVE_PATTERN_COUNTER = 0; 
@@ -238,18 +239,20 @@ char navigateMazePattern(char distance, int degrees)
         turning = 0;
         movingStraight = 1;
         
-        moveDistanceForward(distance*2/10);
+        moveDistanceForward(distance*3/10);
         //increment pattern stage
         patternStage++;
         //Reset Pattern Flag
         RTC_FLAG_MOVE_PATTERN = 0;
     }
     else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 2){
+        //Make sure no wall follow the first part after cliff
+        justLeftCliff = 0;
         enteredFollowStage = 1;
         turning = 0;
         movingStraight = 1;
         
-        moveDistanceForward(distance*3/10);
+        moveDistanceForward(distance*2/10);
         //increment pattern stage
         patternStage++;
         //Reset Pattern Flag

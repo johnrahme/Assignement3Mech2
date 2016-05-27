@@ -28,6 +28,45 @@ void updatePatterns() {
     else{
         followWallPatternStart = 1;
     }*/
+    if(getVirtualWall()){
+         driveBack();
+        __delay_ms(2080);
+        turnCCW();
+        __delay_ms(12*180);
+        updateMap = 1;
+        char checkCurrentWall = 0;
+        char checkPrevWall = 0;
+        if(orientation == NORTH){
+            checkCurrentWall = 0b00000010;
+            checkPrevWall = 0b00000001;
+            orientation = SOUTH;
+        }
+        else if(orientation == EAST){
+            checkCurrentWall = 0b00000001;
+            checkPrevWall = 0b00000100;
+            orientation = WEST;
+        }
+        else if(orientation == SOUTH){
+            checkCurrentWall = 0b00001000;
+            checkPrevWall = 0b00000010;
+            orientation == NORTH;
+        }
+        else if(orientation == WEST){
+            checkCurrentWall = 0b00000100;
+            checkPrevWall = 0b00000001;
+            orientation == EAST;
+        }
+        char currWalls = readMapSegment(currentX, currentY);
+        char prevWalls = readMapSegment(prevX, prevY);
+        
+        writeMapSegment(currentX, currentY, (checkCurrentWall|currWalls));
+        writeMapSegment(prevX, prevY, (checkPrevWall|prevWalls));
+        
+        currentX = prevX;
+        currentY = prevY;
+        patternStage = 0;
+        
+    }
     if(currentX == 2 && currentY == 4 && orientation == EAST&&movingStraight){
         movingToCliff = 1;
         if(resetDistanceReader){
@@ -46,10 +85,14 @@ void updatePatterns() {
             writeMapSegment(2,4,0b00001011);
             writeMapSegment(2,3,0b00000100);
             //Make 1,3, south a wall
-            writeMapSegment(1,3,0b00000110);
+            writeMapSegment(1,3,0b00000111);
             currentX = prevX;
             currentY = prevY;
             movingToCliff = 0;
+            turnBoost = 20;
+            
+            justLeftCliff = 1;
+            
         }
         
     }
@@ -108,7 +151,7 @@ void updatePatterns() {
     }
     //Follow wall if robot is moving straight and not turning the scanner
     
-    if(followWallPatternStart&&((patternStage==2&&hasWall)||patternStage==3)&&!updatingScannerPosition&&!movingToCliff){
+    if(followWallPatternStart&&((patternStage==2&&hasWall&&!justLeftCliff)||patternStage==3)&&!updatingScannerPosition&&!movingToCliff){
        followWallPatternV3(wallFollowDirection);
     }
     

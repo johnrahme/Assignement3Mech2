@@ -43,6 +43,7 @@ int getTraveledDistance(void);
 void updateSensors(void);
 void turnAndDriveDirect(int rightVelocity, int leftVelocity);
 char getCliffSensors();
+char getVirtualWall();
 
 
 char followWallPatternV3(char right);
@@ -67,6 +68,8 @@ char turnScannerFrontFlag = 0;
 char turnScannerFollowFlag = 0;
 
 int distanceToCliff = 0;
+char turnBoost = 0;
+char justLeftCliff = 0;
 
 #endif	/* IROBOT_H */
 
