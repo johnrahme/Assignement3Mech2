@@ -122,6 +122,7 @@ void updatePatterns() {
                 if(currentX == 1 && currentY == 2 && orientation==EAST){
                     navigateMazePatternStart = 0;
                     followWallPatternStart = 0;
+                    playSong4();
                     stop();
                     LED0 = !LED0;
                     updateMap = 0;
@@ -167,6 +168,7 @@ void updatePatterns() {
             if(currentX == 1 && currentY == 2 && orientation==EAST){
                 navigateMazePatternStart = 0;
                 followWallPatternStart = 0;
+                playSong4();
                 stop();
                 LED0 = !LED0;
                 updateMap = 0;

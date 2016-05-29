@@ -45,17 +45,6 @@ void addTone(char tone, char octave, char sharp, char length){
 }
 void setupMarioThemePart1(){
     startSetSong(7, 1);//Set song nr 1, Song length 7
-//    ser_putch(76); __delay_ms(5); ser_putch(10); __delay_ms(5);//E5 for 8/64 second
-//    ser_putch(76); __delay_ms(5); ser_putch(20); __delay_ms(5);//E5 for 16/64 second
-//    ser_putch(76); __delay_ms(5); ser_putch(20); __delay_ms(5);//E5 for 16/64 second
-//    
-//    ser_putch(72); __delay_ms(5); ser_putch(10); __delay_ms(5);//C5 for 8/64 second
-//    ser_putch(76); __delay_ms(5); ser_putch(20); __delay_ms(5);//E5 for 16/64 second
-//    ser_putch(79); __delay_ms(5); ser_putch(40); __delay_ms(5);//G5 for 32/64 second
-//    
-//    ser_putch(67); __delay_ms(5); ser_putch(20); __delay_ms(5);//G4 for 32/64 second
-    
-    //Part one
     addTone('E',3, 0, 10);
     
     addTone('E',3, 0, 20);
@@ -67,11 +56,6 @@ void setupMarioThemePart1(){
     addTone('G',3, 0, 40);
     addTone('G',2, 0, 40);
      
-    
-    
-    //Part 2
-
-    
 
 
 }
@@ -93,22 +77,72 @@ void setupMarioThemePart2(){
     addTone('G',2, 0, 13);
     addTone('E',3, 0, 13);
     addTone('G',3, 0, 14);
-    addTone('A',3, 0, 20);
-    addTone('F',3, 0, 10);
+    addTone('A',3, 0, 30); //addTone('F',3, 0, 10); Skip this one
     addTone('G',3, 0, 20);
     
     addTone('E',3, 0, 20);
     addTone('C',3, 0, 10);
     addTone('D',3, 0, 10);
+    addTone('D',3, 0, 10);
     
+}
+
+void setupMarioStarTheme(){
+    startSetSong(16, 3);//Set song nr 3, Song length 16
+    addTone('C',3, 0, 10);
+    addTone('C',3, 0, 10);
+    addTone('C',3, 0, 5);
+    addTone('C',3, 0, 10);
+    addTone('C',3, 0, 10);
+    addTone('C',3, 0, 15);
+    //addTone('C',3, 0, 5); Removed to make 16 notes...
+    addTone('C',3, 0, 10);
+    addTone('C',3, 0, 10);
     
-    //One more needed
+    addTone('B',2, 0, 10);
+    addTone('B',2, 0, 10);
+    addTone('B',2, 0, 5);
+    addTone('B',2, 0, 10);
+    addTone('B',2, 0, 10);
+    addTone('B',2, 0, 15);
+    //addTone('B',2, 0, 5); Removed to make 16 notes...
+    addTone('B',2, 0, 10);
+    addTone('B',2, 0, 10);
+
+}
+void setupLevelCompleteTheme(){
+    startSetSong(16, 4);//Set song nr 4, Song length 16
+    addTone('F',3, 0, 20);
+    addTone('F',3, 0, 20);
+    addTone('D',3, 0, 10);
+    addTone('F',3, 0, 30);
+    //addTone('D',3, 0, 10);
     
+    addTone('F',3, 0, 10);
+    addTone('D',3, 0, 20);
+    //addTone('C',3, 0, 10);
+    addTone('F',3, 0, 50);
+    //addTone('D',3, 0, 10);
+    
+    addTone('C',4, 0, 10);
+    addTone('D',4, 0, 10);
+    addTone('C',4, 0, 10);
+    addTone('D',4, 0, 10);
+    addTone('C',4, 0, 20);
+    
+    //addTone('C',3, 0, 5);
+    addTone('A',3, 1, 5);
+    addTone('A',3, 0, 5); 
+    addTone('G',3, 0, 10);
+    
+    addTone('F',3, 0, 40);
 }
 
 void setupSongs(){
     setupMarioThemePart1();
     setupMarioThemePart2();
+    setupLevelCompleteTheme();
+    setupMarioStarTheme();
 }
 
 void playSong1(){
@@ -116,4 +150,11 @@ void playSong1(){
 }
 void playSong2(){
        ser_putch(141); __delay_ms(5); ser_putch(2);
+}
+
+void playSong3(){
+    ser_putch(141); __delay_ms(5); ser_putch(3);
+}
+void playSong4(){
+    ser_putch(141); __delay_ms(5); ser_putch(4);
 }

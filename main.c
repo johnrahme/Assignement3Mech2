@@ -105,6 +105,7 @@ void main (void){
         
         if(pb0Pressed){
             // Start the straight pattern
+            playSong3(); // Star song!
             setStartPos(startOrientation,startX,startY);
             distanceTraveled = 0; //added in to 0 the total distance traveled at the start of the function
             navigateMazePatternStart = 1;
