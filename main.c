@@ -75,15 +75,15 @@ void main (void){
     setup();
     LED1 = 0;
     LED0 = 0;
-    //setupSongs();
+    setupSongs();
     writeAdvancedMap();
-    char startOrientation = SOUTH;
-    char startX = 3;
-    char startY = 3;
+    char startOrientation = WEST;
+    char startX = 1;
+    char startY = 2;
     setStartPos(startOrientation,startX,startY);
+    printPosition(startX, startY, startOrientation); 
     victimsFound = 0;
     int moveToVariable = 0;
-    
     
     
     
@@ -120,7 +120,7 @@ void main (void){
             else{
                 startX ++;
             }
-            //printPosition(startX, startY, startOrientation);
+            printPosition(startX, startY, startOrientation);
             /*
             setScannerSpeed(1);
             
@@ -141,7 +141,7 @@ void main (void){
             else{
                 startY ++;
             }
-            //printPosition(startX, startY, startOrientation);
+            printPosition(startX, startY, startOrientation);
             /*
             moveToVariable +=10;
             lcdSetCursor(0x45);
@@ -156,7 +156,7 @@ void main (void){
             else{
                 startOrientation++;
             }
-            //printPosition(startX, startY, startOrientation);
+            printPosition(startX, startY, startOrientation);
             /*
             moveToVariable -=10;
             lcdSetCursor(0x45);
