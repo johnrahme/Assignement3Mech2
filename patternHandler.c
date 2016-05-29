@@ -118,7 +118,7 @@ void updatePatterns() {
     
     if(navigateMazePatternStart){
         if(patternStage == 4){
-            if(checkFrontWall()){
+            if(checkFrontWall()&&!updatingScannerPosition){
                 if(currentX == 1 && currentY == 2 && orientation==EAST){
                     navigateMazePatternStart = 0;
                     followWallPatternStart = 0;

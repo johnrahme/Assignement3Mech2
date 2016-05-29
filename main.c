@@ -82,6 +82,7 @@ void main (void){
     char startY = 2;
     setStartPos(startOrientation,startX,startY);
     printPosition(startX, startY, startOrientation); 
+    setScannerSpeed(1);
     victimsFound = 0;
     int moveToVariable = 0;
     
@@ -122,7 +123,7 @@ void main (void){
             }
             printPosition(startX, startY, startOrientation);
             /*
-            setScannerSpeed(1);
+            
             
             if(!updatingScannerPosition){
                 moveScannerTo = moveToVariable;
