@@ -4,7 +4,8 @@
 #include "common.h"
 #include "ser.h"
 #include "eeprom.h"
-void playSong();
+void playSong1();
+void playSong2();
 void addTone(char tone, char octave, char sharp, char length);
 void setupMarioThemePart1();
 void setupMarioThemePart2();

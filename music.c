@@ -105,6 +105,9 @@ void setupSongs(){
     setupMarioThemePart2();
 }
 
-void playSong(){
+void playSong1(){
+       ser_putch(141); __delay_ms(5); ser_putch(1);
+}
+void playSong2(){
        ser_putch(141); __delay_ms(5); ser_putch(2);
 }

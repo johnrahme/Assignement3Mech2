@@ -85,7 +85,7 @@ void main (void){
     int moveToVariable = 0;
     
     
-    printPosition(startX, startY, startOrientation);
+    //printPosition(startX, startY, startOrientation);
     
     
     
@@ -119,7 +119,7 @@ void main (void){
             else{
                 startX ++;
             }
-            printPosition(startX, startY, startOrientation);
+            //printPosition(startX, startY, startOrientation);
             /*
             setScannerSpeed(1);
             
@@ -140,7 +140,7 @@ void main (void){
             else{
                 startY ++;
             }
-            printPosition(startX, startY, startOrientation);
+            //printPosition(startX, startY, startOrientation);
             /*
             moveToVariable +=10;
             lcdSetCursor(0x45);
@@ -155,7 +155,7 @@ void main (void){
             else{
                 startOrientation++;
             }
-            printPosition(startX, startY, startOrientation);
+            //printPosition(startX, startY, startOrientation);
             /*
             moveToVariable -=10;
             lcdSetCursor(0x45);

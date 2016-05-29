@@ -373,15 +373,23 @@ void updateSensors(){
              lcdSetCursor(0x06);
              char checkThis = 0b00010000;
              char hasChecked = checkThis & mapSeg;
+             /*
             lcdWriteToDigitBCD(checkThis, 2,0);
             lcdSetCursor(0x08); 
             lcdWriteToDigitBCD(mapSeg, 2,0);
             lcdSetCursor(0x0A); 
             lcdWriteToDigitBCD(hasChecked, 2,0);
+             */
             if(!hasChecked){
                 writeMapSegment(currentX, currentY, mapSeg|checkThis);
-                playSong();
+                
                 victimsFound++;
+                if(victimsFound == 1){
+                    playSong1();
+                }
+                else if(victimsFound == 2){
+                    playSong2();
+                }
                 lcdSetCursor(0x0D);
                 lcdWriteToDigitBCD(victimsFound, 1,0);
             }
