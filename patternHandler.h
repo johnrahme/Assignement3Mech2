@@ -18,7 +18,8 @@ int degreesToTurn = 0;
 char wallFollowDirection = 1;
 
 char prevWallFollowDirection = 0;
-char hasWall = 1;
+char hasWallPrev = 1;
+char hasWallCurrent = 1;
 
 char resetDistanceReader = 1;
 char movingToCliff = 0;

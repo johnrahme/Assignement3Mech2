@@ -150,6 +150,9 @@ void main (void){
             pb2Pressed = 0;
         }
         if(pb3Pressed){
+            turnCCW();
+            __delay_ms(11*180);
+           stop();
             if(startOrientation==3){
                 startOrientation = 0;
             }
