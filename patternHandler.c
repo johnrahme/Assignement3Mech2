@@ -16,6 +16,8 @@
 
 void updatePatterns() {
     
+    //Stop robot if it gets home
+    
     if(1){
             //Update the LCD with the distance travelled and check bumper sensors
         updateSensors();// LOOK! Freezes program if not connected to robot
@@ -117,13 +119,21 @@ void updatePatterns() {
     if(navigateMazePatternStart){
         if(patternStage == 4){
             if(checkFrontWall()){
-                updateMap = 1;
-                patternStage = 0;
+                if(currentX == 1 && currentY == 2 && orientation==EAST){
+                    navigateMazePatternStart = 0;
+                    followWallPatternStart = 0;
+                    stop();
+                    LED0 = !LED0;
+                    updateMap = 0;
+                }
+                else{
+                    updateMap = 1;
+                    patternStage = 0;
+                }
             }
         }
         if(updateMap){
             degreesToTurn = moveSegment();
-            
             if(getWallFollowDirection(0)==1){
                 wallFollowDirection = 1;
             }
@@ -147,7 +157,15 @@ void updatePatterns() {
             
         }
         if(navigateMazePattern(100, degreesToTurn)){
+            
             updateMap = 1;
+            if(currentX == 1 && currentY == 2 && orientation==EAST){
+                navigateMazePatternStart = 0;
+                followWallPatternStart = 0;
+                stop();
+                LED0 = !LED0;
+                updateMap = 0;
+            }
         }
         if(enteredFrontStage){
             enteredFrontStage = 0;
