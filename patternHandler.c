@@ -51,7 +51,7 @@ void updatePatterns() {
         char checkPrevWall = 0;
         if(orientation == NORTH){
             checkCurrentWall = 0b00000010;
-            checkPrevWall = 0b00000001;
+            checkPrevWall = 0b00000100;
             orientation = SOUTH;
         }
         else if(orientation == EAST){
@@ -62,12 +62,12 @@ void updatePatterns() {
         else if(orientation == SOUTH){
             checkCurrentWall = 0b00001000;
             checkPrevWall = 0b00000010;
-            orientation == NORTH;
+            orientation = NORTH;
         }
         else if(orientation == WEST){
             checkCurrentWall = 0b00000100;
             checkPrevWall = 0b00000001;
-            orientation == EAST;
+            orientation = EAST;
         }
         char currWalls = readMapSegment(currentX, currentY);
         char prevWalls = readMapSegment(prevX, prevY);
@@ -123,6 +123,7 @@ void updatePatterns() {
         }
         if(updateMap){
             degreesToTurn = moveSegment();
+            
             if(getWallFollowDirection(0)==1){
                 wallFollowDirection = 1;
             }

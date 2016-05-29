@@ -370,9 +370,11 @@ void updateSensors(){
             //stopAllPatterns();
            
             char mapSeg = readMapSegment(currentX, currentY);
+            char prevMapSeg = readMapSegment(prevX, prevY);
              lcdSetCursor(0x06);
              char checkThis = 0b00010000;
              char hasChecked = checkThis & mapSeg;
+             char hasCheckedPrev = checkThis & prevMapSeg;
              /*
             lcdWriteToDigitBCD(checkThis, 2,0);
             lcdSetCursor(0x08); 
@@ -380,7 +382,7 @@ void updateSensors(){
             lcdSetCursor(0x0A); 
             lcdWriteToDigitBCD(hasChecked, 2,0);
              */
-            if(!hasChecked){
+            if(!hasChecked&&!hasCheckedPrev){
                 writeMapSegment(currentX, currentY, mapSeg|checkThis);
                 
                 victimsFound++;

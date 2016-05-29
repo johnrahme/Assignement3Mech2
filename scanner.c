@@ -52,7 +52,6 @@ void moveToPositionFromOrigin(int steps){
             stepsToMove = -stepsToMove;
         }
         RTC_MOVE_SM_FLAG = 0;
-        LED0 = !LED0;
         scanStepNumber++; //increment scanner step number
         if (scanStepNumber < stepsToMove) { //if scanner step number is less than steps to move
             move(direction); //move in direction

@@ -68,7 +68,6 @@ void setup(void){
     setToMotorCW();
     setupLCD();
     initializeADC();
-    //setupSongs();
     spi_transfer(0);
 }
 
@@ -76,22 +75,24 @@ void main (void){
     setup();
     LED1 = 0;
     LED0 = 0;
+    //setupSongs();
     writeAdvancedMap();
-    char startOrientation = WEST;
-    char startX = 1;
-    char startY = 2;
+    char startOrientation = SOUTH;
+    char startX = 3;
+    char startY = 3;
     setStartPos(startOrientation,startX,startY);
     victimsFound = 0;
     int moveToVariable = 0;
     
     
-    //printPosition(startX, startY, startOrientation);
+    
     
     
     
     // Start the adc conversion
     startADCConversion();
     while(1){  
+        
        
         //move(10,0);
         //Check ADC coversion

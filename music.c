@@ -44,7 +44,7 @@ void addTone(char tone, char octave, char sharp, char length){
     ser_putch(baseTone); __delay_ms(5); ser_putch(length); __delay_ms(5);
 }
 void setupMarioThemePart1(){
-    startSetSong(7, 1);//Set song nr 1, Song length 7
+    startSetSong(1, 1);//Set song nr 1, Song length 7
 //    ser_putch(76); __delay_ms(5); ser_putch(10); __delay_ms(5);//E5 for 8/64 second
 //    ser_putch(76); __delay_ms(5); ser_putch(20); __delay_ms(5);//E5 for 16/64 second
 //    ser_putch(76); __delay_ms(5); ser_putch(20); __delay_ms(5);//E5 for 16/64 second
@@ -57,13 +57,16 @@ void setupMarioThemePart1(){
     
     //Part one
     addTone('E',3, 0, 10);
+    /*
     addTone('E',3, 0, 20);
     addTone('E',3, 0, 20);
+    
     addTone('C',3, 0, 10);
     addTone('E',3, 0, 20);
     
     addTone('G',3, 0, 40);
     addTone('G',2, 0, 40);
+     */
     
     
     //Part 2
@@ -74,10 +77,12 @@ void setupMarioThemePart1(){
 }
 
 void setupMarioThemePart2(){
-    startSetSong(16, 2);
+    startSetSong(2, 2);
     
     addTone('C',3, 0, 30);
+    
     addTone('G',2, 0, 30);
+    /*
     addTone('E',2, 0, 30);
     
     addTone('A',2, 0, 20);
@@ -95,6 +100,7 @@ void setupMarioThemePart2(){
     addTone('E',3, 0, 20);
     addTone('C',3, 0, 10);
     addTone('D',3, 0, 10);
+    * */
     
     //One more needed
     

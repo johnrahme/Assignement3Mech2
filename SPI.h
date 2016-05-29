@@ -13,7 +13,7 @@
 
 
 volatile unsigned int time_count;
-volatile bit FLAG_1000MS;
+
 char currentDirection = 1;
 //Function prototypes
 void setupSPI(void);
