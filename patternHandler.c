@@ -108,7 +108,7 @@ void updatePatterns() {
             currentX = prevX;
             currentY = prevY;
             movingToCliff = 0;
-            turnBoost = 20;
+            turnBoost = 0;
             
             justLeftCliff = 1;
             
