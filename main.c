@@ -80,6 +80,7 @@ void main (void){
     char startOrientation = WEST;
     char startX = 1;
     char startY = 2;
+    setStartPos(startOrientation,startX,startY);
     victimsFound = 0;
     int moveToVariable = 0;
     

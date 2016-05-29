@@ -368,8 +368,25 @@ void updateSensors(){
             LED0 = !LED0;
             //Stop all movement
             //stopAllPatterns();
-            victimsFound = 2;
-            playSong();
+           
+            char mapSeg = readMapSegment(currentX, currentY);
+             lcdSetCursor(0x06);
+             char checkThis = 0b00010000;
+             char hasChecked = checkThis & mapSeg;
+            lcdWriteToDigitBCD(checkThis, 2,0);
+            lcdSetCursor(0x08); 
+            lcdWriteToDigitBCD(mapSeg, 2,0);
+            lcdSetCursor(0x0A); 
+            lcdWriteToDigitBCD(hasChecked, 2,0);
+            if(!hasChecked){
+                writeMapSegment(currentX, currentY, mapSeg|checkThis);
+                playSong();
+                victimsFound++;
+                lcdSetCursor(0x0D);
+                lcdWriteToDigitBCD(victimsFound, 1,0);
+            }
+            // Set the victim flag in map segment
+            
             
         }
         //Update and write distance travelled

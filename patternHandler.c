@@ -80,6 +80,10 @@ void updatePatterns() {
         patternStage = 0;
         
     }
+    // Dont look for wall when heading towards 2,2 when moving WEST
+    if(currentX == 2 && currentY == 2 && orientation == WEST){
+        hasWall = 0;
+    }
     if(currentX == 2 && currentY == 4 && orientation == EAST&&movingStraight){
         movingToCliff = 1;
         if(resetDistanceReader){
@@ -98,7 +102,7 @@ void updatePatterns() {
             writeMapSegment(2,4,0b00001011);
             //writeMapSegment(2,3,0b00000100);
             //Make 1,3, south a wall
-            writeMapSegment(1,3,0b00000111);
+            writeMapSegment(1,3,0b00001111);
             currentX = prevX;
             currentY = prevY;
             movingToCliff = 0;
@@ -129,16 +133,14 @@ void updatePatterns() {
             else{
                 wallFollowDirection = 2;
             }
+            //*****MIGHT NOT NEED THIS START***
             if(getWallFollowDirection(1)==2){
                 hasWall = 0;
-                lcdSetCursor(0x08);
-                lcdWriteString("No wall");
             }else{
                 hasWall = 1;
-                lcdSetCursor(0x08);
-                lcdWriteString("Has wall");
             }
             prevWallFollowDirection == wallFollowDirection;
+            //****MIGHT NOT NEED THIS END****
             //int scannerSteps = getScannerLocation();
             updateMap = 0;
             
