@@ -31,8 +31,9 @@ void updatePatterns() {
     else{
         followWallPatternStart = 1;
     }*/
-    if(currentX == 2&&currentY == 3 && orientation==WEST&&getBumpDropSensor()){
-        driveBack();
+    if(currentX == 2&&currentY == 3 && orientation==WEST&&!updatingScannerPosition){
+        if(getBumpDropSensor()){
+           driveBack();
         __delay_ms(11*180);
         updateMap = 1;
         writeMapSegment(currentX, currentY, 0b00001100);
@@ -40,17 +41,19 @@ void updatePatterns() {
         currentY = prevY;
         //Hardcoded for bump at 2,4
          
-         patternStage = 0;
+         patternStage = 0; 
+        }
+        
         
         
     }
     //Should be virtual wall not lcdIRData
-    if(updateLcdIRData){
+    if(updateLcdIRData&&!updatingScannerPosition){
         updateLcdIRData = 0;
         if(getVirtualWall()){
             LED0 = !LED0;
              driveBack();
-            __delay_ms(2080);
+            __delay_ms(2500); //Drive back further
             turnCCW();
             __delay_ms(11*180);
             updateMap = 1;
