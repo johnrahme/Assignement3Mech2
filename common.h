@@ -16,6 +16,9 @@
 #define SOUTH 2
 #define EAST 1
 
+#define FAST 1
+#define SLOW 0
+
 
 char victimsFound = 0;
 

@@ -82,7 +82,7 @@ void main (void){
     char startY = 2;
     setStartPos(startOrientation,startX,startY);
     printPosition(startX, startY, startOrientation); 
-    setScannerSpeed(1);
+    setScannerSpeed(3);
     victimsFound = 0;
     int moveToVariable = 0;
     
@@ -92,8 +92,7 @@ void main (void){
     
     // Start the adc conversion
     startADCConversion();
-    while(1){  
-        
+    while(1){
        
         //move(10,0);
         //Check ADC coversion
@@ -105,6 +104,8 @@ void main (void){
         
         if(pb0Pressed){
             // Start the straight pattern
+            //setSpeed(FAST);
+            robotSpeed = FAST;
             playSong3(); // Star song!
             setStartPos(startOrientation,startX,startY);
             distanceTraveled = 0; //added in to 0 the total distance traveled at the start of the function
@@ -112,7 +113,7 @@ void main (void){
             followWallPatternStart = 1;
             followPatternStage = 0;
             pb0Pressed = 0;
-            LED0 = !LED0;
+            
             
         }  
         if(pb1Pressed){

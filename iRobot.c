@@ -10,7 +10,15 @@ void setupIRobot(void){
 
 //Drive straight forward
 void drive(void){
-    ser_putch(DRIVE); __delay_ms(5); ser_putch(0); __delay_ms(5); ser_putch(200); __delay_ms(5); ser_putch(127); __delay_ms(5); ser_putch(255);__delay_ms(5);
+    if(robotSpeed == SLOW){
+        LED0 = !LED0;
+        ser_putch(DRIVE); __delay_ms(5); ser_putch(0); __delay_ms(5); ser_putch(200); __delay_ms(5); ser_putch(127); __delay_ms(5); ser_putch(255);__delay_ms(5);
+    }
+    else if (robotSpeed == FAST){
+        
+        ser_putch(DRIVE); __delay_ms(5); ser_putch(1); __delay_ms(5); ser_putch(144); __delay_ms(5); ser_putch(127); __delay_ms(5); ser_putch(255);__delay_ms(5);
+    }
+    
 }
 void driveBack(void){
     ser_putch(DRIVE); __delay_ms(5); ser_putch(255); __delay_ms(5); ser_putch(56); __delay_ms(5); ser_putch(127); __delay_ms(5); ser_putch(255);__delay_ms(5);
@@ -87,8 +95,14 @@ void stop(void){
 void moveDistanceForward(int centimeters){
     RTC_MOVE_PATTERN_COUNTER = 0; //Reset the counter
     // 21053/4/100 = 52.6325 ---> milliseconds to move one centimeter
+    float timeToMoveOneCentimeter = 52.6325;
+    if(robotSpeed == SLOW){
+        timeToMoveOneCentimeter = 52.6325; // Should probably be a float number instead
+    }
+    else if(robotSpeed == FAST){
+        timeToMoveOneCentimeter = 52.6325/2; // Should probably be a float number instead
+    }
     
-    float timeToMoveOneCentimeter = 52.6325; // Should probably be a float number instead
     int totalTimeToMove = centimeters*timeToMoveOneCentimeter;
     //Set the time for the counter to wait until next step in pattern
     MOVE_PATTERN_TIME = totalTimeToMove;
@@ -134,6 +148,16 @@ char followWallPatternV3(char right){
         //Reset counter
         RTC_FOLLOW_PATTERN_COUNTER = 0; 
         FOLLOW_PATTERN_TIME = 10; //How often to update
+        int speed = 400;
+        if(robotSpeed == SLOW){
+            speed = 200;
+            LED0 = !LED0;
+        }
+        else if(robotSpeed == FAST){
+            
+            speed = 400;
+        }
+        
         int valueOff = latestReadMeterValue-65;
         valueOff*10; // Convert To millimeters
         int speedRightWheel = 0;
@@ -151,13 +175,13 @@ char followWallPatternV3(char right){
         
         //Set the wheel speed
         if(wallToFar){
-            speedRightWheel = 200;
-            speedLeftWheel = 200;
+            speedRightWheel = speed;
+            speedLeftWheel = speed;
             
         }
         else{
-            speedRightWheel = 200+valueOff/divideBy*times;
-            speedLeftWheel = 200-valueOff/divideBy*times;
+            speedRightWheel = speed+valueOff/divideBy*times;
+            speedLeftWheel = speed-valueOff/divideBy*times;
         }
         
          //Check if it lost the wall
@@ -192,8 +216,7 @@ char findCliffPattern(){
             
             patternStage++;
         }
-        lcdSetCursor(0x0A);
-        lcdWriteToDigitBCD(distanceToCliff,3,0);
+       
     }
     else if (patternStage == 1){
         RTC_MOVE_PATTERN_COUNTER = 0;
@@ -371,7 +394,7 @@ void updateSensors(){
            
             char mapSeg = readMapSegment(currentX, currentY);
             char prevMapSeg = readMapSegment(prevX, prevY);
-             lcdSetCursor(0x06);
+            
              char checkThis = 0b00010000;
              char hasChecked = checkThis & mapSeg;
              char hasCheckedPrev = checkThis & prevMapSeg;
@@ -392,8 +415,7 @@ void updateSensors(){
                 else if(victimsFound == 2){
                     playSong2();
                 }
-                lcdSetCursor(0x0D);
-                lcdWriteToDigitBCD(victimsFound, 1,0);
+               
             }
             // Set the victim flag in map segment
             

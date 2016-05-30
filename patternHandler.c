@@ -18,9 +18,10 @@ void updatePatterns() {
     
     //Stop robot if it gets home
     
-    if(1){
+    if(updateSensorsFlag){
             //Update the LCD with the distance travelled and check bumper sensors
         updateSensors();// LOOK! Freezes program if not connected to robot
+        updateSensorsFlag = 0;
     }
     
     //Special case for cliff check
@@ -43,44 +44,49 @@ void updatePatterns() {
         
         
     }
-    if(getVirtualWall()){
-         driveBack();
-        __delay_ms(2080);
-        turnCCW();
-        __delay_ms(11*180);
-        updateMap = 1;
-        char checkCurrentWall = 0;
-        char checkPrevWall = 0;
-        if(orientation == NORTH){
-            checkCurrentWall = 0b00000010;
-            checkPrevWall = 0b00001000;
-            orientation = SOUTH;
+    //Should be virtual wall not lcdIRData
+    if(updateLcdIRData){
+        updateLcdIRData = 0;
+        if(getVirtualWall()){
+            LED0 = !LED0;
+             driveBack();
+            __delay_ms(2080);
+            turnCCW();
+            __delay_ms(11*180);
+            updateMap = 1;
+            char checkCurrentWall = 0;
+            char checkPrevWall = 0;
+            if(orientation == NORTH){
+                checkCurrentWall = 0b00000010;
+                checkPrevWall = 0b00001000;
+                orientation = SOUTH;
+            }
+            else if(orientation == EAST){
+                checkCurrentWall = 0b00000001;
+                checkPrevWall = 0b00000100;
+                orientation = WEST;
+            }
+            else if(orientation == SOUTH){
+                checkCurrentWall = 0b00001000;
+                checkPrevWall = 0b00000010;
+                orientation = NORTH;
+            }
+            else if(orientation == WEST){
+                checkCurrentWall = 0b00000100;
+                checkPrevWall = 0b00000001;
+                orientation = EAST;
+            }
+            char currWalls = readMapSegment(currentX, currentY);
+            char prevWalls = readMapSegment(prevX, prevY);
+
+            writeMapSegment(currentX, currentY, (checkCurrentWall|currWalls));
+            writeMapSegment(prevX, prevY, (checkPrevWall|prevWalls));
+
+            currentX = prevX;
+            currentY = prevY;
+            patternStage = 0;
+
         }
-        else if(orientation == EAST){
-            checkCurrentWall = 0b00000001;
-            checkPrevWall = 0b00000100;
-            orientation = WEST;
-        }
-        else if(orientation == SOUTH){
-            checkCurrentWall = 0b00001000;
-            checkPrevWall = 0b00000010;
-            orientation = NORTH;
-        }
-        else if(orientation == WEST){
-            checkCurrentWall = 0b00000100;
-            checkPrevWall = 0b00000001;
-            orientation = EAST;
-        }
-        char currWalls = readMapSegment(currentX, currentY);
-        char prevWalls = readMapSegment(prevX, prevY);
-        
-        writeMapSegment(currentX, currentY, (checkCurrentWall|currWalls));
-        writeMapSegment(prevX, prevY, (checkPrevWall|prevWalls));
-        
-        currentX = prevX;
-        currentY = prevY;
-        patternStage = 0;
-        
     }
     // Dont look for wall when heading towards 2,2 when moving WEST
     if(currentX == 2 && currentY == 2 && orientation == WEST){

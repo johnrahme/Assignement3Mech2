@@ -72,5 +72,7 @@ int distanceToCliff = 0;
 char turnBoost = 0;
 char justLeftCliff = 0;
 
+char robotSpeed = 0;
+
 #endif	/* IROBOT_H */
 

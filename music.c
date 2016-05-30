@@ -83,7 +83,7 @@ void setupMarioThemePart2(){
     addTone('E',3, 0, 20);
     addTone('C',3, 0, 10);
     addTone('D',3, 0, 10);
-    addTone('D',3, 0, 10);
+    addTone('B',2, 0, 10);
     
 }
 

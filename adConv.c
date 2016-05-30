@@ -65,8 +65,8 @@ void printADCData(){
                 //lcdWriteToDigitBCD(result,4,0);
                 //lcdSetCursor(0x09);
                 //lcdWriteString("=>");
-                lcdWriteToDigitBCD(resultInMeters,3,0); // Write the adc data in meters to LCD
-                lcdWriteString("cm");
+                //lcdWriteToDigitBCD(resultInMeters,3,0); // Write the adc data in meters to LCD
+                //lcdWriteString("cm");
                 
             }
             // Restart the ADC conversion
