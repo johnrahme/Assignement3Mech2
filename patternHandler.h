@@ -23,6 +23,8 @@ char hasWallCurrent = 1;
 
 char resetDistanceReader = 1;
 char movingToCliff = 0;
+
+char virtualWallFound = 0;
     
     //Check if the robot should scan for closest wall or scan and move to closest wall
 char onlyScan = 1;

@@ -25,6 +25,11 @@ void lcdRefresh(){
         updateSensorsFlag = 1;
         irLcdCounter = 0;
     }
+    virtualWallCounter++;
+    if(virtualWallCounter==VIRTUAL_WALL_REFRESH_RATE){
+        updateVirtualWall = 1;
+        virtualWallCounter = 0;
+    }
     
 }
 

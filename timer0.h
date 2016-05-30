@@ -4,6 +4,7 @@
 
 #define DEBOUNCE_REQ_COUNT 10 // Debounce for 10 ms
 #define LCD_REFRESH_RATE 100 // set refresh rate 
+#define VIRTUAL_WALL_REFRESH_RATE 50
 
 volatile unsigned int rtcCounter = 0;
 
@@ -22,6 +23,9 @@ volatile unsigned char pbCounter3 = 0;
 volatile bit pb3Pressed = 0;
 volatile bit pb3Released = 0; 
 volatile unsigned char pbCounter4 = 0;
+
+volatile bit updateVirtualWall = 0;
+volatile unsigned char virtualWallCounter = 0;
 
 volatile bit updateLcdIRData = 0; //Update refresh bit flag
 volatile bit updateSensorsFlag = 0; //Sensors update at the same time as LCD

@@ -48,9 +48,14 @@ void updatePatterns() {
         
     }
     //Should be virtual wall not lcdIRData
-    if(updateLcdIRData&&!updatingScannerPosition){
-        updateLcdIRData = 0;
+    if(updateVirtualWall){
+        updateVirtualWall = 0;
         if(getVirtualWall()){
+            virtualWallFound = 1;
+        }
+    }
+        if(virtualWallFound&&!updatingScannerPosition){
+            virtualWallFound = 0;
             LED0 = !LED0;
              driveBack();
             __delay_ms(2500); //Drive back further
@@ -90,7 +95,6 @@ void updatePatterns() {
             patternStage = 0;
 
         }
-    }
     // Dont look for wall when heading towards 2,2 when moving WEST
     if(currentX == 2 && currentY == 2 && orientation == WEST){
         hasWallPrev = 0;
