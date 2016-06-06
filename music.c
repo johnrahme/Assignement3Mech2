@@ -8,10 +8,13 @@
 
 #include "music.h"
 
+//This sets the length of the song and its ID number
 void startSetSong(char length, char nr){
     ser_putch(140); __delay_ms(5); ser_putch(nr); __delay_ms(5);ser_putch(length); __delay_ms(5);
 }
+//Function that simplifies writing music (Pretty proud of this one, made life much easier)
 void addTone(char tone, char octave, char sharp, char length){
+    //Function takes a tone as a character, an octave, the duration and if the tone is sharp or not
     char baseTone = 0;
     switch(tone){ 
         case 'C':
@@ -41,6 +44,7 @@ void addTone(char tone, char octave, char sharp, char length){
         baseTone++;
     //add the octave
     baseTone += octave*12;
+    // Write the tone to the robot
     ser_putch(baseTone); __delay_ms(5); ser_putch(length); __delay_ms(5);
 }
 void setupMarioThemePart1(){
@@ -138,6 +142,7 @@ void setupLevelCompleteTheme(){
     addTone('F',3, 0, 40);
 }
 
+//Setup all the songs
 void setupSongs(){
     setupMarioThemePart1();
     setupMarioThemePart2();
@@ -145,6 +150,7 @@ void setupSongs(){
     setupMarioStarTheme();
 }
 
+//Functions to play all different songs, for some reason sending variables to these functions didn't work. Thus we had to make separate functions for each song
 void playSong1(){
        ser_putch(141); __delay_ms(5); ser_putch(1);
 }

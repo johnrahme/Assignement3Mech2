@@ -1,12 +1,4 @@
-/*********************************************************************************
-	Description: Controls stepper motor from debounced buttons
-	Uses: DSX Experimenter board and SMPM
-	Connections:
-				iRobot - DSX Kit Addon Module
 
-	Author: Kyle Alvarez
-
-**********************************************************************************/
 #include "common.h"
 #include "ser.h"
 #include "iRobot.h"
@@ -75,12 +67,16 @@ void main (void){
     setup();
     LED1 = 0;
     LED0 = 0;
+    //Setup all songs
     setupSongs();
+    //Write map to eeprom
     writeAdvancedMap();
+    //Set the start position and orientation
     char startOrientation = WEST;
     char startX = 1;
     char startY = 2;
     setStartPos(startOrientation,startX,startY);
+    // Print current position to lcd
     printPosition(startX, startY, startOrientation); 
     setScannerSpeed(3);
     victimsFound = 0;
@@ -103,8 +99,7 @@ void main (void){
 
         
         if(pb0Pressed){
-            // Start the straight pattern
-            //setSpeed(FAST);
+            //Start the navigate maze pattern
             robotSpeed = FAST;
             playSong3(); // Star song!
             setStartPos(startOrientation,startX,startY);
@@ -116,6 +111,8 @@ void main (void){
             
             
         }  
+
+        //Pb1-pb3 Sets the start position in the maze. This is for debugging if we want to start somewhere else.
         if(pb1Pressed){
             if(startX==4){
                 startX = 1;
@@ -124,14 +121,7 @@ void main (void){
                 startX ++;
             }
             printPosition(startX, startY, startOrientation);
-            /*
-            
-            
-            if(!updatingScannerPosition){
-                moveScannerTo = moveToVariable;
-                updatingScannerPosition = 1;
-            } 
-             */
+
             pb1Pressed = 0;
             
             
@@ -145,11 +135,7 @@ void main (void){
                 startY ++;
             }
             printPosition(startX, startY, startOrientation);
-            /*
-            moveToVariable +=10;
-            lcdSetCursor(0x45);
-            lcdWriteToDigitBCD(moveToVariable,3,1);
-            */
+            
             pb2Pressed = 0;
         }
         if(pb3Pressed){
@@ -163,11 +149,7 @@ void main (void){
                 startOrientation++;
             }
             printPosition(startX, startY, startOrientation);
-            /*
-            moveToVariable -=10;
-            lcdSetCursor(0x45);
-            lcdWriteToDigitBCD(moveToVariable,3,1);
-             **/
+            
             pb3Pressed = 0;
         }
         

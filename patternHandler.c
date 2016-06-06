@@ -16,21 +16,14 @@
 
 void updatePatterns() {
     
-    //Stop robot if it gets home
     
     if(updateSensorsFlag){
-            //Update the LCD with the distance travelled and check bumper sensors
+            //Update the victim sensors
         updateSensors();// LOOK! Freezes program if not connected to robot
         updateSensorsFlag = 0;
     }
     
-    //Special case for cliff check
-    /*if((currentX == 3 && currentY == 3 && orientation == SOUTH)||(currentX == 2 && currentY == 2 && orientation == WEST)){
-        followWallPatternStart = 0;
-    }
-    else{
-        followWallPatternStart = 1;
-    }*/
+    // Check for bump sensor in segment 2,3
     if(currentX == 2&&currentY == 3 && orientation==WEST&&!updatingScannerPosition){
         if(getBumpDropSensor()){
            driveBack();
@@ -47,13 +40,15 @@ void updatePatterns() {
         
         
     }
-    //Should be virtual wall not lcdIRData
+    //Check the flag for updating virtual wall sensor
     if(updateVirtualWall){
         updateVirtualWall = 0;
         if(getVirtualWall()){
+            // If virtual wall detected set flag
             virtualWallFound = 1;
         }
     }
+        // If the scanner position is not updating and wall is found move back and turn around
         if(virtualWallFound&&!updatingScannerPosition){
             virtualWallFound = 0;
             LED0 = !LED0;
@@ -64,6 +59,7 @@ void updatePatterns() {
             updateMap = 1;
             char checkCurrentWall = 0;
             char checkPrevWall = 0;
+            // Write wall to eeprom so that it does not need to check the virtual wall next time
             if(orientation == NORTH){
                 checkCurrentWall = 0b00000010;
                 checkPrevWall = 0b00001000;
@@ -87,9 +83,10 @@ void updatePatterns() {
             char currWalls = readMapSegment(currentX, currentY);
             char prevWalls = readMapSegment(prevX, prevY);
 
+            //Write the new wall to eeprom
             writeMapSegment(currentX, currentY, (checkCurrentWall|currWalls));
             writeMapSegment(prevX, prevY, (checkPrevWall|prevWalls));
-
+            // Reset current position to previous position
             currentX = prevX;
             currentY = prevY;
             patternStage = 0;
@@ -99,8 +96,11 @@ void updatePatterns() {
     if(currentX == 2 && currentY == 2 && orientation == WEST){
         hasWallPrev = 0;
     }
+
+    // Hard coded part for cliff, when in 2,4 moving EAST
     if(currentX == 2 && currentY == 4 && orientation == EAST&&movingStraight){
         movingToCliff = 1;
+        // Reset the distance reader
         if(resetDistanceReader){
             resetDistanceReader = 0;
             getTraveledDistance();
@@ -108,6 +108,7 @@ void updatePatterns() {
             distanceToCliff = 0;
         }
         navigateMazePatternStart = 0;
+        //Update the find cliff pattern until it returns a 1
         if(findCliffPattern()){
             
             navigateMazePatternStart = 1;
@@ -115,12 +116,12 @@ void updatePatterns() {
             patternStage = 0;
             // set the cliff to a wall
             writeMapSegment(2,4,0b00001011);
-            //writeMapSegment(2,3,0b00000100);
-            //Make 1,3, south a wall
+            //Make 1,3, south a wall, Small fix so robot would not go back and check that area again
             writeMapSegment(1,3,0b00001111);
             currentX = prevX;
             currentY = prevY;
             movingToCliff = 0;
+            // Old variable set to make the robot turn a little extra after cliff
             turnBoost = 0;
             
             justLeftCliff = 1;
@@ -129,9 +130,13 @@ void updatePatterns() {
         
     }
     
+    //Check the navigate maze flag
     if(navigateMazePatternStart){
+        // If in fron check stage
         if(patternStage == 4){
+            // Check front for wall
             if(checkFrontWall()&&!updatingScannerPosition){
+                // If robot is home stop and play song
                 if(currentX == 1 && currentY == 2 && orientation==EAST){
                     navigateMazePatternStart = 0;
                     followWallPatternStart = 0;
@@ -140,14 +145,19 @@ void updatePatterns() {
                     LED0 = !LED0;
                     updateMap = 0;
                 }
+                // Otherwise update map and restart cycle
                 else{
                     updateMap = 1;
                     patternStage = 0;
                 }
             }
         }
+        // If the map is to be updated, that is start heading to a new segment
         if(updateMap){
+            // Use map navigation to find out how many degrees to turn 
             degreesToTurn = moveSegment();
+
+            // Find out what direction to wall follow
             if(getWallFollowDirection(0)==1){
                 wallFollowDirection = 1;
             }
@@ -158,26 +168,28 @@ void updatePatterns() {
             else{
                 wallFollowDirection = 2;
             }
-            //*****MIGHT NOT NEED THIS START***
+
+            // Check if previous sgement had a wall
             if(getWallFollowDirection(1)==2){
                 hasWallPrev = 0;
             }else{
                 hasWallPrev = 1;
             }
+            // Check if current sgement had a wall
             if(getWallFollowDirection(0)==2){
                 hasWallCurrent = 0;
             }else{
                 hasWallCurrent = 1;
             }
             prevWallFollowDirection == wallFollowDirection;
-            //****MIGHT NOT NEED THIS END****
-            //int scannerSteps = getScannerLocation();
             updateMap = 0;
             
         }
+        // Update the navigate maze pattern with the degrees to turn 
         if(navigateMazePattern(100, degreesToTurn)){
-            
+            // When the pattern is done update the map for next segment
             updateMap = 1;
+            // If home play sound and stop
             if(currentX == 1 && currentY == 2 && orientation==EAST){
                 navigateMazePatternStart = 0;
                 followWallPatternStart = 0;
@@ -187,11 +199,13 @@ void updatePatterns() {
                 updateMap = 0;
             }
         }
+        //Update the ir position when front check stage is entered
         if(enteredFrontStage){
             enteredFrontStage = 0;
             updatingScannerPosition = 1;
             moveScannerTo = 0;
         }
+        // Update the ir position when wall follow stage is entered
         else if(enteredFollowStage){
             enteredFollowStage = 0;
             updatingScannerPosition = 1;
@@ -203,14 +217,13 @@ void updatePatterns() {
             }
         }
     }
-    //Follow wall if robot is moving straight and not turning the scanner
     
+    // Follow wall if there is a wall to follow and if robot is moving straight and not turning the scanner
     if(followWallPatternStart&&((patternStage==2&&hasWallPrev&&!justLeftCliff)||(hasWallCurrent&&patternStage==3))&&!updatingScannerPosition&&!movingToCliff){
        followWallPatternV3(wallFollowDirection);
     }
     
-    //Move to specific location
+    //Move scanner to specific location
     moveToPositionFromOrigin(moveScannerTo);
-    //updateScanner();
    
 }

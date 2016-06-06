@@ -42,12 +42,15 @@ bit canMove(char direction){
 	return 1;
 }
 
+// This function converts the direction we want to turn into how many degrees CW or CCW that represents
 int turn(signed char direction){
+
     char newOrientation = 0;
     
     prevX = currentX;
     prevY = currentY;
     
+    //Check the direction to turn and set the current x and y coordinates to the corresponding segment
     switch(direction){
         case NORTH:
             currentX = northX;
@@ -72,9 +75,11 @@ int turn(signed char direction){
           
     }
     
+    //The equation we derived to find out what way to turn depending on current orientation
     int degrees = (direction-orientation)*90;
     signed char specialCaseTest = (direction-orientation);
 
+    //This equation had 2 special cases where the degrees to turn had to be set manually
     if(specialCaseTest == 3){
         degrees = -90;
     }
@@ -83,14 +88,18 @@ int turn(signed char direction){
     }
     orientation = newOrientation;
     
+    //Send the degrees back
     return degrees;
 }
+
+// When the victim has been found the fastest way back is found with this function
 char findFastest(){
     char returnDirection = NORTH;
     char smallestPriority = 20;
     
+    //Check if there is a wall with canMove and then read the map priority from eeprom. 
     if(canMove(NORTH)&&readMapPriority(northX,northY)<smallestPriority){
-        smallestPriority = readMapPriority(northX,northY);
+        smallestPriority = readMapPriority(northX,northY); // Store if this is the smallest number so far
         returnDirection = NORTH;
     }
     if(canMove(EAST)&&readMapPriority(eastX,eastY)<smallestPriority){
@@ -105,6 +114,7 @@ char findFastest(){
         smallestPriority = readMapPriority(westX,westY);
         returnDirection = WEST;
     }
+    // Return the direction that is the fastest to move
     return returnDirection;
 }
 int  moveSegment(){
@@ -198,18 +208,23 @@ int  moveSegment(){
     return 0;
 }
 
+//This function finds out if there should be a left, right or no wall follow.
 int getWallFollowDirection(char prev){
     int wallAt = 7;
     char x = 0;
     char y = 0;
+
+    //This checks the previous segment
     if(prev){
         x = prevX;
         y = prevY;
     }
+    //This checks the current segment
     else{
         x = currentX;
         y = currentY;
     }
+    //See if the semgent has a right or left wall
     if(orientation==NORTH||orientation==SOUTH){
         if(readMapSegment(x, y)&0b00000001){
             wallAt = WEST;
@@ -238,6 +253,7 @@ int getWallFollowDirection(char prev){
     //If no wall found return 2
     return 2;
 }
+//Function to print the current position to the LCD
 void printPosition(char x, char y, char dir){
     lcdSetCursor(0x40);
     lcdWriteString("X:");

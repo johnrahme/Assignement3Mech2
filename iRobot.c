@@ -149,6 +149,7 @@ char followWallPatternV3(char right){
         RTC_FOLLOW_PATTERN_COUNTER = 0; 
         FOLLOW_PATTERN_TIME = 10; //How often to update
         int speed = 400;
+        // set speed to the choosen mode
         if(robotSpeed == SLOW){
             speed = 200;
             LED0 = !LED0;
@@ -206,9 +207,11 @@ char followWallPatternV3(char right){
     }
 }
 
+//This patterns moves to cliff and then goes back the distance moved to it's original position
 char findCliffPattern(){
     
     if(patternStage == 0){
+        //Get the distance travelled and update the distance variasble
         distanceToCliff +=getTraveledDistance();
         driveSlow();
         
@@ -218,6 +221,7 @@ char findCliffPattern(){
         }
        
     }
+    //Move backwards
     else if (patternStage == 1){
         RTC_MOVE_PATTERN_COUNTER = 0;
         RTC_FLAG_MOVE_PATTERN = 0;
@@ -225,6 +229,7 @@ char findCliffPattern(){
         LED0 = !LED0;
         patternStage++;
     }
+    //Move forward
     else if (patternStage == 2 && RTC_FLAG_MOVE_PATTERN){
         LED0 = !LED0;
         RTC_FLAG_MOVE_PATTERN = 0;
@@ -236,10 +241,12 @@ char findCliffPattern(){
 
 char navigateMazePattern(char distance, int degrees)
 {
+    //If there are no degrees to turn then move directly to stage 1
     if(degrees == 0 && patternStage == 0){
             patternStage = 1;
             RTC_FLAG_MOVE_PATTERN = 1;
     }
+    //stage 0 is the turning of the robot
     if(patternStage == 0){
         turning = 1;
         movingStraight = 0;
@@ -257,6 +264,7 @@ char navigateMazePattern(char distance, int degrees)
         RTC_FLAG_MOVE_PATTERN = 0;
         enteredFollowStage = 1;
     }
+    //This stage moves the robot forward 3/10 of the way. WALL FOLLOW PART 1
     else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 1){
         enteredFollowStage = 1;
         turning = 0;
@@ -268,6 +276,7 @@ char navigateMazePattern(char distance, int degrees)
         //Reset Pattern Flag
         RTC_FLAG_MOVE_PATTERN = 0;
     }
+    //This stage moves the robot forward 2/10 of the way. WALL FOLLOW PART 2
     else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 2){
         //Make sure no wall follow the first part after cliff
         justLeftCliff = 0;
@@ -281,6 +290,7 @@ char navigateMazePattern(char distance, int degrees)
         //Reset Pattern Flag
         RTC_FLAG_MOVE_PATTERN = 0;
     }
+    //This stage moves the robot forward 5/10 of the way. FRONT CHECK
     else if (RTC_FLAG_MOVE_PATTERN&&patternStage == 3){
         turning = 0;
         movingStraight = 1;
@@ -378,36 +388,27 @@ char getCliffSensors(){
 //Function to update the sensors and see if the robot needs to stop
 void updateSensors(){
     if(updateSensorsFlag){
-        //Check bumpWheelSensors
-        
-        //char bumpSensor = getBumpDropSensor();
-        // Check cliff sensors
-        //char cliffSensors = getCliffSensors();
-        //char bumpSensorResult = bumpSensor&0b00011111;
+
+        // Get the force field
         char forceField = getForceField();
         
         
         if(forceField){
             LED0 = !LED0;
-            //Stop all movement
-            //stopAllPatterns();
            
+            // Store the current segment and previous
             char mapSeg = readMapSegment(currentX, currentY);
             char prevMapSeg = readMapSegment(prevX, prevY);
             
+            // Check if victim in this segment has already been found
              char checkThis = 0b00010000;
              char hasChecked = checkThis & mapSeg;
              char hasCheckedPrev = checkThis & prevMapSeg;
-             /*
-            lcdWriteToDigitBCD(checkThis, 2,0);
-            lcdSetCursor(0x08); 
-            lcdWriteToDigitBCD(mapSeg, 2,0);
-            lcdSetCursor(0x0A); 
-            lcdWriteToDigitBCD(hasChecked, 2,0);
-             */
             if(!hasChecked&&!hasCheckedPrev){
+                //If it has not been found write to eeprom that a victim has been found in this segment
                 writeMapSegment(currentX, currentY, mapSeg|checkThis);
                 
+                //Play song according to what victim was found
                 victimsFound++;
                 if(victimsFound == 1){
                     playSong1();
@@ -421,12 +422,6 @@ void updateSensors(){
             
             
         }
-        //Update and write distance travelled
-        /*
-        distanceTraveled += getTraveledDistance();
-        lcdSetCursor(0x40);
-        lcdWriteToDigitBCD(distanceTraveled/10, 4, 0);
-        */
         updateSensorsFlag = 0;
     }
 }
